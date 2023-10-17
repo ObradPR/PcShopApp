@@ -1,0 +1,124 @@
+<div id="contact" class="wrapper padding-section">
+  <h2>Contact us</h2>
+  <hr class="style-1" />
+  <div id="contact-bottom">
+    <div id="contact-info">
+      <div class="contact-info-row">
+        <i class="fa-solid fa-envelope"></i> - pcshop.serbia@gmail.com
+      </div>
+      <div class="contact-info-row">
+        <i class="fa-solid fa-location-dot"></i> - On multiple locations
+      </div>
+      <div class="contact-info-row">
+        <i class="fa-solid fa-phone"></i> - 061-333-1234
+      </div>
+      <div class="contact-info-row">
+        <i class="fa-solid fa-phone"></i> - 061-133-2222
+      </div>
+      <div class="contact-info-row">
+        <div class="social-medias">
+          <div class="media-holder">
+            <a href="https://www.instagram.com" target="_blank">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </div>
+          <div class="media-holder">
+            <a href="https://www.facebook.com" target="_blank">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+          </div>
+          <div class="media-holder">
+            <a href="https://www.linkedin.com" target="_blank">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+          </div>
+          <div class="media-holder">
+            <a href="https://www.youtube.com" target="_blank">
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="contact-form-holder">
+      <form
+        id="contact-form"
+        [formGroup]="contactForm"
+        (ngSubmit)="onSubmitForm()"
+      >
+        <div class="form-block">
+          <input
+            type="email"
+            id="contact-email-tb"
+            formControlName="email"
+            (keyup)="onInputKeyup('contact-email-tb', $event.target.value)"
+          />
+          <label
+            for="contact-email-tb"
+            [class.active]="isLabelActive['contact-email-tb']"
+            ><span style="color: var(--red)">*</span>Email:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !contactForm.get('email').valid &&
+              contactForm.get('email').touched
+            "
+            >Invalid email.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="text"
+            id="contact-title-tb"
+            formControlName="title"
+            (keyup)="onInputKeyup('contact-title-tb', $event.target.value)"
+          />
+          <label
+            for="contact-title-tb"
+            [class.active]="isLabelActive['contact-title-tb']"
+            ><span style="color: var(--red)">*</span>Title:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !contactForm.get('title').valid &&
+              contactForm.get('title').touched
+            "
+            >Invalid title.</span
+          >
+        </div>
+        <div class="form-block">
+          <textarea
+            id="contact-content-tb"
+            cols="30"
+            rows="10"
+            formControlName="content"
+            (keyup)="onInputKeyup('contact-content-tb', $event.target.value)"
+          ></textarea>
+          <label
+            for="contact-content-tb"
+            [class.active]="isLabelActive['contact-content-tb']"
+            ><span style="color: var(--red)">*</span>Content:</label
+          >
+          <span
+            class="invalid-txtArea"
+            *ngIf="
+              !contactForm.get('content').valid &&
+              contactForm.get('content').touched
+            "
+            >Invalid content.</span
+          >
+        </div>
+        <div class="form-block-submit-offer">
+          <input
+            type="submit"
+            value="Send"
+            id="contact-submit-btn"
+            [disabled]="!contactForm.valid || contactForm.untouched"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

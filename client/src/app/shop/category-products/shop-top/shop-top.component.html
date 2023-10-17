@@ -1,0 +1,12 @@
+<div id="shop-top-holder">
+  <div id="sort-holder">
+    <label for="sort-ddl">Sort by:</label>
+    <select id="sort-ddl" #sort (change)="onProductSorting(sort.value)">
+      <option value="0">-- Select --</option>
+      <option value="sort-name">Name</option>
+      <option value="sort-max-price">Max price</option>
+      <option value="sort-min-price">Min price</option>
+      <option value="sort-rating">Rating</option>
+    </select>
+  </div>
+</div>

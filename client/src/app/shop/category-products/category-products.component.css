@@ -1,0 +1,14 @@
+#category-products-holder {
+  display: flex;
+  width: 100%;
+}
+
+#category-products-left {
+  width: 20%;
+  padding: 0.5rem 1rem 0.5rem 0;
+}
+
+#category-products-right {
+  width: 80%;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+}

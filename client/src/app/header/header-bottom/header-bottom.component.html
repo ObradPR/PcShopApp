@@ -1,0 +1,84 @@
+<div class="header-bottom-holder wrapper">
+  <div id="logo">
+    <a routerLink="/">
+      <img src="../../../assets/img/logo.png" alt="Logo picture" />
+    </a>
+  </div>
+  <div id="header-search">
+    <input
+      type="search"
+      id="inputSearch"
+      placeholder="Search your favourite products..."
+    />
+    <input type="button" value="Search" />
+  </div>
+  <div id="header-user-icons">
+    <div class="header-user-icon">
+      <a [routerLink]="'/wishlist/' + userId">
+        <ng-container *ngIf="checkWishlist; else noItems">
+          <i class="fa-solid fa-heart"></i>
+        </ng-container>
+        <ng-template #noItems>
+          <i class="fa-regular fa-heart"></i>
+        </ng-template>
+      </a>
+      <ng-container *ngIf="isLogged">
+        <div class="count-circle">
+          <p>{{ wishlistItemsCount }}</p>
+        </div>
+      </ng-container>
+    </div>
+    <div class="header-user-icon">
+      <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+      <div class="count-circle"><p>0</p></div>
+    </div>
+    <div class="header-user-icon">
+      <a href="#"><i class="fa-solid fa-user"></i></a>
+      <ng-container *ngIf="isLogged">
+        <div class="count-circle"><p>0</p></div>
+      </ng-container>
+    </div>
+    <div id="auth-block">
+      <ng-container *ngIf="!isLogged; else logged">
+        <a style="cursor: pointer" (click)="onOpenLoginModal()">Log in</a>
+        <a style="cursor: pointer" (click)="onOpenRegisterModal()">Register</a>
+      </ng-container>
+      <ng-template #logged>
+        <a
+          style="cursor: pointer; color: var(--dark-red); font-weight: 500"
+          (click)="onLogout()"
+          ><i class="fa-solid fa-right-from-bracket"></i
+        ></a>
+      </ng-template>
+    </div>
+  </div>
+  <div class="nav-collapse" (click)="onToggleNavigation()">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+</div>
+<nav>
+  <ul id="nav-menu" [ngClass]="{ hidden: !collapsedMenu }">
+    <li
+      routerLinkActive="active-link"
+      routerLink="/"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a routerLink="/">Home</a>
+    </li>
+    <li routerLinkActive="active-link">
+      <a routerLink="/shop">Shop</a>
+    </li>
+    <li routerLinkActive="active-link" routerLink="/repair-service">
+      <a routerLink="/repair-service">Service</a>
+    </li>
+    <li routerLinkActive="active-link" routerLink="/faqs">
+      <a routerLink="/faqs">FAQs</a>
+    </li>
+    <li routerLinkActive="active-link" routerLink="/stores">
+      <a routerLink="/stores">Stores</a>
+    </li>
+    <li routerLinkActive="active-link" routerLink="/contact">
+      <a routerLink="/contact">Contact</a>
+    </li>
+  </ul>
+</nav>

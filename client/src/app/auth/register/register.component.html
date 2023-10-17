@@ -1,0 +1,151 @@
+<div class="modal-wrapper">
+  <div class="modal" [@scaleAnimation]>
+    <div class="form-holder">
+      <h2>Registration</h2>
+      <hr class="style-1" />
+      <div class="close-mark-modal-form" (click)="onClosingModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <form id="reg-form" [formGroup]="regForm" (ngSubmit)="onRegSubmit()">
+        <div class="form-block">
+          <input
+            type="text"
+            id="first-name-tb"
+            formControlName="firstName"
+            (keyup)="onInputKeyup('first-name-tb', $event.target.value)"
+          />
+          <label
+            for="first-name-tb"
+            [class.active]="isLabelActive['first-name-tb']"
+            ><span style="color: var(--red)">*</span>First name:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !regForm.get('firstName').valid &&
+              regForm.get('firstName').touched
+            "
+            >Invalid first name.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="text"
+            id="last-name-tb"
+            formControlName="lastName"
+            (keyup)="onInputKeyup('last-name-tb', $event.target.value)"
+          />
+          <label
+            for="last-name-tb"
+            [class.active]="isLabelActive['last-name-tb']"
+            ><span style="color: var(--red)">*</span>Last name:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !regForm.get('lastName').valid && regForm.get('lastName').touched
+            "
+            >Invalid last name.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="tel"
+            id="phone-tb"
+            formControlName="phone"
+            (keyup)="onInputKeyup('phone-tb', $event.target.value)"
+          />
+          <label for="phone-tb" [class.active]="isLabelActive['phone-tb']"
+            >Phone number:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="!regForm.get('phone').valid && regForm.get('phone').touched"
+            >Must be in format ###-###-####.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="email"
+            id="email-tb"
+            formControlName="email"
+            (keyup)="onInputKeyup('email-tb', $event.target.value)"
+          />
+          <label for="email-tb" [class.active]="isLabelActive['email-tb']"
+            ><span style="color: var(--red)">*</span>Email:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="!regForm.get('email').valid && regForm.get('email').touched"
+            >Invalid email.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="password"
+            id="password-tb"
+            formControlName="password"
+            (keyup)="onInputKeyup('password-tb', $event.target.value)"
+          />
+          <label for="password-tb" [class.active]="isLabelActive['password-tb']"
+            ><span style="color: var(--red)">*</span>Password:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !regForm.get('password').valid && regForm.get('password').touched
+            "
+            >Password must have one uppercase, one lowercase letter, one digit,
+            one special character and minimum 8 characters.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="password"
+            id="retype-password-tb"
+            formControlName="retypePassword"
+            (keyup)="onInputKeyup('retype-password-tb', $event.target.value)"
+          />
+          <label
+            for="retype-password-tb"
+            [class.active]="isLabelActive['retype-password-tb']"
+            ><span style="color: var(--red)">*</span>Retype password:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !regForm.get('retypePassword').valid &&
+              regForm.get('retypePassword').touched
+            "
+            >Wrong password.</span
+          >
+        </div>
+        <div class="form-block newsletter-block">
+          <input
+            type="checkbox"
+            id="newsletter-cb"
+            formControlName="newsletter"
+          />
+          <label for="newsletter-cb" class="label-no-absolute">
+            Sign up for email notifications and receive news updates!
+          </label>
+          <span class="invalid-input" *ngIf="!regForm.valid && regForm.touched"
+            >Fill your form properly.</span
+          >
+        </div>
+        <div class="form-block reg-submit-block">
+          <input
+            type="submit"
+            id="reg-submit-btn"
+            value="Submit"
+            [disabled]="!regForm.valid || regForm.untouched"
+          />
+        </div>
+      </form>
+    </div>
+    <a class="a-login" (click)="onSwitchToLoginModal()"
+      >Already have an account? Login &rarr;</a
+    >
+  </div>
+</div>
+<div class="backdrop"></div>

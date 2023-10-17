@@ -1,0 +1,400 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Ubuntu", sans-serif;
+  transition: all 250ms ease-out;
+}
+
+:root {
+  --block-radius: 10px;
+  --block-radius-min: 3px;
+  --button-radius: 5px;
+  --blue: #006fe6;
+  --blue-transparent: #006fe654;
+  --light-blue: #2088f8;
+  --orange: #ff6c00;
+  --orange-transparent: #ff6c0054;
+  --light-orange: #fa812b;
+  --black: #1a1a1a;
+  --light-black: #585858;
+  --light-black-transparent: #585858c5;
+  --grey: #f5f5f5;
+  --grey-transparent: #f5f5f5c5;
+  --grey-2: #bbbbbb;
+  --dark-grey: #979797;
+  --dark-grey-transparent: #979797c5;
+  --white: #ffffff;
+  --dark-white: #c5c5c5;
+  --golden: #ffd700;
+  --green: #00d998;
+  --red: #e94444;
+  --red-transparent: #e94444c5;
+  --dark-red: #c53c3c;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.wrapper {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.padding-section {
+  padding: 4rem 0;
+}
+
+.hidden {
+  max-height: 0;
+}
+
+p {
+  font-size: 1rem;
+}
+
+.no-content-block {
+  padding: 1rem 1.5rem;
+  background-color: var(--dark-grey-transparent);
+  border: 1px solid var(--black);
+  text-align: center;
+  width: auto;
+  margin: 0 auto;
+  border-radius: var(--button-radius);
+}
+
+.error-handling-block {
+  padding: 1rem 1.5rem;
+  background-color: var(--red-transparent);
+  border: 1px solid var(--dark-red);
+  text-align: center;
+  width: auto;
+  margin: 0 auto;
+  border-radius: var(--button-radius);
+}
+
+.center-block {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.social-medias {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SIMPLE ANIMATION */
+.section-hidden {
+  opacity: 0;
+  transform: translateY(8rem);
+}
+.element-hidden-left {
+  opacity: 0;
+  transform: translateX(-8rem);
+}
+.element-hidden-right {
+  opacity: 0;
+  transform: translateX(8rem);
+}
+.element-hidden-top {
+  opacity: 0;
+  transform: translateY(-8rem);
+}
+.element-hidden-bottom {
+  opacity: 0;
+  transform: translateY(8rem);
+}
+
+/* LOADING SPINNER */
+.loading-spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--grey-transparent);
+  /* Add an overlay with transparency for a better user experience */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Set a high z-index to ensure the spinner is on top of other content */
+}
+
+.loading-spinner {
+  border: 5px solid rgba(0, 0, 0, 0.3);
+  border-top: 5px solid var(--blue); /* Replace with your desired color */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* FORMS */
+.form-block {
+  position: relative;
+}
+
+.form-block label {
+  position: absolute;
+  top: 0.7rem;
+  left: 1.5rem;
+  color: var(--light-black);
+  background-color: var(--white);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.form-block label.active {
+  background-color: var(--white);
+  padding: 0.2rem;
+  top: -0.65rem;
+  left: 0.4rem;
+}
+
+label.picture-label {
+  position: static;
+}
+
+input[type="text"]:focus + label,
+input[type="tel"]:focus + label,
+input[type="email"]:focus + label,
+input[type="password"]:focus + label,
+textarea:focus + label {
+  background-color: var(--white);
+  padding: 0.2rem;
+  top: -0.65rem;
+  left: 0.4rem;
+}
+
+.label-no-absolute {
+  position: static;
+}
+
+input[type="search"],
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea,
+select {
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+input[type="button"],
+input[type="submit"],
+.a-btn {
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  color: var(--white);
+  background-color: var(--orange);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+input[type="submit"] {
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
+input[type="submit"]:disabled {
+  background-color: var(--dark-grey);
+}
+
+input[type="submit"]:disabled:hover {
+  background-color: var(--dark-grey);
+  cursor: not-allowed;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.a-btn:hover {
+  background-color: var(--light-orange);
+}
+
+span.invalid-input {
+  color: var(--red);
+  font-size: 0.9rem;
+  position: absolute;
+  top: 2.5rem;
+  left: 0.5rem;
+}
+span.invalid-input-picture {
+  color: var(--red);
+  font-size: 0.9rem;
+  position: absolute;
+  top: 3.5rem;
+  left: 0.5rem;
+}
+span.invalid-txtArea {
+  color: var(--red);
+  font-size: 0.9rem;
+  position: absolute;
+  top: 12.8rem;
+  left: 0.5rem;
+}
+
+/* HR */
+hr.style-1 {
+  border: 0;
+  height: 4px;
+  background-image: linear-gradient(
+    to right,
+    var(--blue-transparent),
+    var(--blue),
+    var(--blue-transparent)
+  );
+}
+hr.style-2 {
+  border: 0;
+  height: 4px;
+  background-color: var(--orange);
+}
+
+/* PLAIN MODAL */
+.modal-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  z-index: 9999;
+}
+.modal {
+  background-color: white;
+  padding: 2rem;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9998;
+}
+
+/* FORM X MARK */
+.form-holder {
+  position: relative;
+}
+
+.close-mark-modal-form {
+  position: absolute;
+  top: -2.3rem;
+  right: -1.3rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
+.close-mark-modal-form i {
+  font-size: 1.25rem;
+  color: var(--white);
+}
+
+.close-mark-modal-form:hover {
+  background-color: var(--dark-red);
+}
+
+/*  PRODUCT BLOCKS */
+.old-price {
+  text-decoration: line-through;
+  font-size: 1.2rem;
+  font-weight: 200;
+  color: var(--dark-grey);
+}
+
+.current-price {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.saved-price {
+  color: var(--red);
+  font-size: 1.1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1500px) {
+  .wrapper {
+    width: 80%;
+  }
+}
+
+@media (max-width: 949px) {
+  .wrapper {
+    width: 95%;
+  }
+}
+
+@media (max-width: 918px) {
+  span.invalid-input {
+    font-size: 0.75rem;
+  }
+
+  .form-block label {
+    top: 0.65rem;
+    left: 1.2rem;
+  }
+}
+
+@media (max-width: 758px) {
+  .padding-section {
+    padding: 2rem 0;
+  }
+}
+
+@media (max-width: 583px) {
+  .close-mark-modal-form {
+    top: -1.3rem;
+    right: -1.3rem;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

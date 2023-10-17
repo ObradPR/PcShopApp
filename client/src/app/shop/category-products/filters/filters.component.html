@@ -1,0 +1,77 @@
+<div id="filters-holder">
+  <div class="filter-block">
+    <div class="filter-block-row">
+      <h3>Price Range</h3>
+    </div>
+    <mat-slider
+      [min]="baseMinPrice"
+      [max]="baseMaxPrice"
+      discrete
+      (change)="onPriceRangeChange($event)"
+    >
+      <input [value]="baseMinPrice" matSliderStartThumb #leftInput />
+      <input [value]="baseMaxPrice" matSliderEndThumb #rightInput />
+    </mat-slider>
+  </div>
+  <hr />
+  <div class="filter-block">
+    <div class="filter-block-row filter-header active">
+      <h3>Brands</h3>
+    </div>
+    <div id="filter-brands-holder" (change)="onBrandsChange($event)">
+      <div class="filter-block-row" *ngFor="let brand of brands; let i = index">
+        <input
+          type="checkbox"
+          [id]="brand.brand_name + i"
+          [value]="brand.brand_name + i"
+          class="tb-brands"
+          checked
+        />
+        <label [for]="brand.brand_name + i">{{ brand.brand_name }}</label>
+        <span>{{ brand.brand_count }}</span>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="filter-block">
+    <div class="filter-block-row filter-header active">
+      <h3>Tags</h3>
+    </div>
+    <div id="filter-tags-holder" (change)="onTagsChange($event)">
+      <div class="filter-block-row" *ngFor="let tag of tags; let i = index">
+        <input
+          type="checkbox"
+          [id]="tag + i"
+          [value]="tag + i"
+          checked
+          class="tb-tags"
+        />
+        <label [for]="tag + i">{{ tag.tag_name }}</label>
+        <span>{{ tag.product_count }}</span>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="filter-block filter-block-categories">
+    <div class="filter-block-row filter-header">
+      <h3>All Categories</h3>
+    </div>
+    <div id="filter-categories-holder">
+      <div
+        class="filter-block-row"
+        *ngFor="let category of categories; let i = index"
+      >
+        <input
+          type="checkbox"
+          [id]="category.category_name + i"
+          [value]="category.category_name + i"
+          [checked]="category.id_category === activeCategory"
+        />
+        <label [for]="category.category_name + i">{{
+          category.category_name
+        }}</label>
+        <span>{{ category.product_count }}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div id="payment-types" class="wrapper padding-section">
+  <h2>Payment types info</h2>
+  <br /><br />
+  <ng-container *ngIf="paymentTypes.length > 0; else noPaymentTypes">
+    <ng-container *ngFor="let type of paymentTypes">
+      <div class="type-block">
+        <div class="type-img">
+          <img
+            src="../../../assets/img/{{ type.payment_type_img_src }}"
+            alt="{{ type.payment_type }}"
+          />
+        </div>
+        <div class="type-info">
+          <h4>{{ type.payment_type }}</h4>
+          <br /><br />
+          <p>{{ type.payment_type_description }}</p>
+        </div>
+      </div>
+      <br /><br /><br />
+    </ng-container>
+  </ng-container>
+  <ng-template #noPaymentTypes>
+    <ng-container *ngIf="paymentTypesErrorMessage; else noContent">
+      <div class="center-block">
+        <div class="error-handling-block">
+          <p>{{ paymentTypesErrorMessage }}</p>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noContent>
+      <div class="center-block">
+        <div class="no-content-block">
+          <p>There are no payment types currently.</p>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

@@ -1,0 +1,40 @@
+<div id="repair-service" class="wrapper padding-section">
+  <h2>Our repair service</h2>
+  <hr class="style-1" />
+  <div id="service-table-holder">
+    <ng-container *ngIf="repairServices.length > 0; else noServices">
+      <table id="service-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Estimated time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let service of repairServices">
+            <td>{{ service.service_description }}</td>
+            <td>€ {{ service.service_price }}</td>
+            <td>{{ service.service_estimated_time }} business days</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-template #noServices>
+      <ng-container *ngIf="repairErrorMessage; else noContent">
+        <div class="center-block">
+          <div class="error-handling-block">
+            <p>{{ repairErrorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noContent>
+        <div class="center-block">
+          <div class="no-content-block">
+            <p>There are no repair services currently.</p>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

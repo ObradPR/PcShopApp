@@ -1,0 +1,29 @@
+<div id="faqs-section" class="wrapper padding-section">
+  <h2>Frequently asked questions (FAQs)</h2>
+  <div id="faq-content">
+    <ng-container *ngIf="faqs.length > 0; else noFaqs">
+      <ng-container *ngFor="let faq of faqs">
+        <h3>{{ faq.faq_question }}</h3>
+        <br />
+        <p>{{ faq.faq_answer }}</p>
+        <br /><br />
+      </ng-container>
+    </ng-container>
+    <ng-template #noFaqs>
+      <ng-container *ngIf="faqErrorMessage; else noContent">
+        <div class="center-block">
+          <div class="error-handling-block">
+            <p>{{ faqErrorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noContent>
+        <div class="center-block">
+          <div class="no-content-block">
+            <p>There are no faqs currently.</p>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

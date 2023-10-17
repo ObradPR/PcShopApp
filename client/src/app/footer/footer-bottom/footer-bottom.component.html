@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <div id="footer-bottom-holder">
+    <div class="footer-bottom-column">
+      <h3>User account</h3>
+      <ng-container *ngIf="!isLogged; else logged">
+        <a style="cursor: pointer" (click)="onOpenLoginModal()"
+          >Have a account?<br />Log in</a
+        >
+        <a style="cursor: pointer" (click)="onOpenRegisterModal()">Register</a>
+      </ng-container>
+      <ng-template #logged>
+        <a style="cursor: pointer" (click)="onLogout()">Logout</a>
+      </ng-template>
+    </div>
+    <div class="footer-bottom-column">
+      <h3>Sale</h3>
+      <a href="#">Discount products</a>
+      <a href="#">New arrival</a>
+      <a href="#">Best seller</a>
+    </div>
+    <div class="footer-bottom-column">
+      <h3>Company</h3>
+      <a routerLink="/about-us">About us</a>
+      <a routerLink="/we-rent">We rent premises</a>
+    </div>
+    <div class="footer-bottom-column">
+      <h3>Shopping</h3>
+      <a routerLink="/stores">Stores</a>
+      <a routerLink="/payment-types">Payment types</a>
+      <a routerLink="/customer-rights"
+        >Notice on customer rights and obligations</a
+      >
+    </div>
+    <div class="footer-bottom-column">
+      <h3>Need help?</h3>
+      <a routerLink="/faqs">FAQs</a>
+      <a routerLink="/contact">Contact</a>
+      <a routerLink="/how-to-buy">How to buy from pcshop.com</a>
+    </div>
+  </div>
+</div>

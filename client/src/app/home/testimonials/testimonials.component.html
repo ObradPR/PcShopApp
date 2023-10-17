@@ -1,0 +1,42 @@
+<div class="wrapper padding-section">
+  <h2>Testimonials</h2>
+  <hr class="style-1" />
+  <div id="testimonials-holder">
+    <ng-container *ngIf="testimonials.length > 0; else noTestimonials">
+      <div class="testimonial-block" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-icon">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <p>
+          {{ testimonial.review }}
+        </p>
+        <div class="testimonial-info">
+          <h3>{{ testimonial.customer_name }}</h3>
+          <p>
+            {{ testimonial.customer_position }},
+            <a href="#">{{ testimonial.company_name }}</a>
+          </p>
+        </div>
+        <div class="testimonial-quote-icon">
+          <i class="fa-solid fa-quote-right"></i>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noTestimonials>
+      <ng-container *ngIf="testimonialErrorMessage; else noContent">
+        <div class="center-block">
+          <div class="error-handling-block">
+            <p>{{ testimonialErrorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noContent>
+        <div class="center-block">
+          <div class="no-content-block">
+            <p>There are no testimonials currently.</p>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

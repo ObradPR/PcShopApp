@@ -1,0 +1,69 @@
+<div id="stores">
+  <div id="stores-list">
+    <div id="list-top">
+      <input
+        type="search"
+        id="store-search"
+        placeholder="Search for a store..."
+        #searchStore
+        (keyup)="filterStores(searchStore.value)"
+      />
+      <hr />
+    </div>
+    <div id="list-bottom">
+      <ng-container *ngIf="stores.length > 0; else noStores">
+        <div
+          class="store-block-holder"
+          *ngFor="let store of filteredStores"
+          (click)="
+            onMoveToStorePosition(
+              store.latitude,
+              store.longitude,
+              store.store_name
+            )
+          "
+        >
+          <div class="store-block">
+            <b>{{ store.store_name }}</b>
+            <p><b>Contact:</b> {{ store.store_contact_phone }}</p>
+            <p><b>Business days:</b> {{ store.hourly_rate_working_days }}h</p>
+            <p>
+              <b>Saturday:</b>
+              {{
+                store.hourly_rate_saturday
+                  ? store.hourly_rate_saturday + "h"
+                  : "closed"
+              }}
+            </p>
+            <p>
+              {{
+                store.city_name + " " + store.street_name + " " + store.number
+              }}
+            </p>
+          </div>
+          <div class="store-icon">
+            <i class="fa-solid fa-shop"></i>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noStores>
+        <ng-container *ngIf="storeErrorMessage; else noContent">
+          <div class="center-block">
+            <div class="error-handling-block">
+              <p>{{ storeErrorMessage }}</p>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noContent>
+          <div class="center-block">
+            <div class="no-content-block">
+              <p>There are no stores currently.</p>
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+
+  <div id="map"></div>
+</div>

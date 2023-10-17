@@ -1,0 +1,41 @@
+<ng-container *ngIf="categories.length > 0; else empty">
+  <ng-container *ngIf="categories[0].id_cat_parent !== null">
+    <a
+      class="back-btn"
+      style="cursor: pointer"
+      (click)="onGetBackCategory(categories[0].id_cat_parent)"
+      >< back</a
+    >
+  </ng-container>
+  <div id="shop-categories">
+    <div
+      class="category-block"
+      *ngFor="let category of categories"
+      (click)="onCategorySelect(category.id_category)"
+    >
+      <div class="category-img">
+        <img
+          src="../../../assets/img/{{ category.src }}"
+          alt="{{ category.category_name }}"
+        />
+      </div>
+      <h3>{{ category.category_name }}</h3>
+    </div>
+  </div>
+</ng-container>
+<ng-template #empty>
+  <ng-container *ngIf="categoriesErrorMessage; else noContent">
+    <div class="center-block">
+      <div class="error-handling-block">
+        <p>{{ categoriesErrorMessage }}</p>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noContent>
+    <div class="center-block">
+      <div class="no-content-block">
+        <p>There are no categories at the moment.</p>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

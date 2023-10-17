@@ -1,0 +1,20 @@
+<div
+  id="message-modal"
+  [ngClass]="{
+    'message-success': modalStyle === 'success',
+    'message-error': modalStyle === 'error'
+  }"
+  [@scaleAnimation]
+>
+  <div class="close-mark">
+    <i
+      class="fa-solid fa-xmark"
+      [ngClass]="{
+        'message-i-success': modalStyle === 'success',
+        'message-i-error': modalStyle === 'error'
+      }"
+      (click)="onModalClose()"
+    ></i>
+  </div>
+  <p>{{ message }}</p>
+</div>

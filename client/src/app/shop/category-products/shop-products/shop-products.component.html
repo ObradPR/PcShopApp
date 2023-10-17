@@ -1,0 +1,84 @@
+<ng-container *ngIf="products.length > 0; else noProducts">
+  <div id="shop-products-holder">
+    <div class="shop-product--block" *ngFor="let product of products">
+      <div class="shop-card--product">
+        <!-- WISHLIST LOGIC -->
+        <div
+          class="add-to-wishlist"
+          (click)="
+            addProductToWishlist(product.id_product, product.in_wishlist)
+          "
+        >
+          <ng-container *ngIf="product.in_wishlist; else notIn">
+            <i class="fa-solid fa-heart"></i>
+          </ng-container>
+          <ng-template #notIn>
+            <i class="fa-regular fa-heart"></i>
+          </ng-template>
+        </div>
+        <!-- IMG -->
+        <div class="product--block-img">
+          <!-- main img -->
+          <img
+            src="../../../assets/img/{{ product.src }}"
+            alt="{{ product.product_name }}"
+          />
+        </div>
+        <!-- TEXT  -->
+        <div class="text-name">
+          <h3>{{ product.product_name }}</h3>
+          <div class="product--block-text">
+            <div class="product--block-price">
+              <ng-container
+                *ngIf="product.discount_price !== null; else elsePrice"
+              >
+                <p class="old-price">€{{ product.product_price }}</p>
+                <p class="current-price">€{{ product.discount_price }}</p>
+                <p class="saved-price">Saved: €{{ product.saved }}</p>
+              </ng-container>
+              <ng-template #elsePrice>
+                <p class="current-price">€{{ product.product_price }}</p>
+              </ng-template>
+            </div>
+            <div class="product-to-cart">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="to-cart-triangle"></div>
+      <ng-container *ngIf="product.discount_value !== null">
+        <div class="discount-triangle"></div>
+        <div class="discount-value">-{{ product.discount_value }}%</div>
+      </ng-container>
+      <ng-container
+        *ngIf="product.tag_names && product.tag_names.includes('New')"
+      >
+        <div class="new-product-tag">New</div>
+      </ng-container>
+      <ng-container
+        *ngIf="product.tag_names && product.tag_names.includes('Best Seller')"
+      >
+        <div class="best-seller-product-tag">Best seller</div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noProducts>
+  <ng-container *ngIf="productsErrorMessage; else noContent">
+    <div class="center-block">
+      <div class="error-handling-block">
+        <p>{{ productsErrorMessage }}</p>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noContent>
+    <div class="center-block">
+      <div class="no-content-block">
+        <p>There are no products for selected category.</p>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,16 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+<app-footer></app-footer>
+<app-scroll-to-top></app-scroll-to-top>
+<ng-container *ngIf="isVisibleRegister">
+  <app-register></app-register>
+</ng-container>
+<ng-container *ngIf="isVisibleLogin">
+  <app-login></app-login>
+</ng-container>
+<div *ngIf="loadingPage" class="loading-spinner-container">
+  <div class="loading-spinner"></div>
+</div>
+<ng-container *ngIf="msgModalVisible">
+  <app-message-modal></app-message-modal>
+</ng-container>

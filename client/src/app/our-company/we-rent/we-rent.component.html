@@ -1,0 +1,242 @@
+<div id="we-rent" class="wrapper padding-section">
+  <h2>We rent premises</h2>
+  <br /><br />
+  <p>
+    We rent premises throughout Serbia. Premises should have the following
+    characteristics:
+  </p>
+  <br /><br />
+  <ul>
+    <li>Area from 70 to 200 m2</li>
+    <li>The premises must be on one level</li>
+    <li>
+      The premises must have a direct entrance from the street and a minimum
+      window of 3m in length
+    </li>
+    <li>Frequency of passers-by by the premises - minimum 20,000 per day</li>
+    <li>Minimum distance of 1km from the existing PcShop store</li>
+    <li>The possibility of having a parking space for delivery is desirable</li>
+    <li>Two phone lines and fast internet connection</li>
+    <li>Minimum lease period - 2 years</li>
+    <li>
+      If the premises is located in a pedestrian zone, it is necessary to be on
+      the side of the main direction of pedestrian movement, as well as to be
+      able to deliver goods in the morning hours.
+    </li>
+  </ul>
+  <br /><br /><br />
+  <h2 id="offer-h2">Offer form</h2>
+  <hr class="style-1" />
+  <div id="premises-offer-div">
+    <div id="offer-info">
+      <p>The offer should contain the following:</p>
+      <br /><br />
+      <ul>
+        <li>Name of client</li>
+        <li>Contact email</li>
+        <li>Contact phone</li>
+        <li>Premises address</li>
+        <li>Square footage of the local</li>
+        <li>External picture of the local</li>
+        <li>Interior picture of the local</li>
+        <li>Financial offer</li>
+        <li>Details about local</li>
+      </ul>
+    </div>
+    <form
+      id="offer-form"
+      [formGroup]="offerForm"
+      (ngSubmit)="onOfferFormSubmit()"
+      enctype="multipart/form-data"
+    >
+      <div id="offer-form-top">
+        <div class="form-block">
+          <input
+            type="text"
+            id="client-name-tb"
+            formControlName="clientName"
+            (keyup)="onInputKeyup('client-name-tb', $event.target.value)"
+          />
+          <label
+            for="client-name-tb"
+            [class.active]="isLabelActive['client-name-tb']"
+            ><span style="color: var(--red)">*</span>Client name:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('clientName').valid &&
+              offerForm.get('clientName').touched
+            "
+            >Invalid client name.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="email"
+            id="contact-offer-email-tb"
+            formControlName="contactOfferEmail"
+            (keyup)="
+              onInputKeyup('contact-offer-email-tb', $event.target.value)
+            "
+          />
+          <label
+            for="contact-offer-email-tb"
+            [class.active]="isLabelActive['contact-offer-email-tb']"
+            ><span style="color: var(--red)">*</span>Contact email:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('contactOfferEmail').valid &&
+              offerForm.get('contactOfferEmail').touched
+            "
+            >Invalid email.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="tel"
+            id="contact-offer-phone-tb"
+            formControlName="contactOfferPhone"
+            (keyup)="
+              onInputKeyup('contact-offer-phone-tb', $event.target.value)
+            "
+          />
+          <label
+            for="contact-offer-phone-tb"
+            [class.active]="isLabelActive['contact-offer-phone-tb']"
+            ><span style="color: var(--red)">*</span>Contact phone:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('contactOfferPhone').valid &&
+              offerForm.get('contactOfferPhone').touched
+            "
+            >Phone must be in format ###-###-####.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="text"
+            id="premises-addres-tb"
+            formControlName="premisesAddress"
+            (keyup)="onInputKeyup('premises-address-tb', $event.target.value)"
+          />
+          <label
+            for="premises-address-tb"
+            [class.active]="isLabelActive['premises-address-tb']"
+            ><span style="color: var(--red)">*</span>Premises address:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('premisesAddress').valid &&
+              offerForm.get('premisesAddress').touched
+            "
+            >Invalid premises address.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="text"
+            id="square-footage-tb"
+            formControlName="squareFootage"
+            (keyup)="onInputKeyup('square-footages-tb', $event.target.value)"
+          />
+          <label
+            for="square-footages-tb"
+            [class.active]="isLabelActive['square-footages-tb']"
+            ><span style="color: var(--red)">*</span>Square footage:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('squareFootage').valid &&
+              offerForm.get('squareFootage').touched
+            "
+            >Invalid square footage.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="text"
+            id="financial-offer-tb"
+            formControlName="financialOffer"
+            (keyup)="onInputKeyup('financial-offer-tb', $event.target.value)"
+          />
+          <label
+            for="financial-offer-tb"
+            [class.active]="isLabelActive['financial-offer-tb']"
+            ><span style="color: var(--red)">*</span>Financial offer per year
+            €:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !offerForm.get('financialOffer').valid &&
+              offerForm.get('financialOffer').touched
+            "
+            >Invalid financial offer.</span
+          >
+        </div>
+        <div class="form-block">
+          <label for="pictures" class="picture-label"
+            ><span style="color: var(--red)">*</span>Pictures outside and
+            inside:</label
+          >
+          <input
+            #pictures
+            type="file"
+            id="pictures"
+            formControlName="pictures"
+            multiple
+            accept="image/*"
+            (change)="onUploadImage()"
+          />
+          <span
+            class="invalid-input-picture"
+            *ngIf="
+              !offerForm.get('pictures').valid &&
+              offerForm.get('pictures').touched
+            "
+            >Must upload image.</span
+          >
+        </div>
+      </div>
+      <div id="offer-form-bottom">
+        <div class="form-block">
+          <textarea
+            cols="30"
+            rows="10"
+            id="offer-details-tb"
+            formControlName="offerDetails"
+            (keyup)="onInputKeyup('offer-details-tb', $event.target.value)"
+          ></textarea>
+          <label
+            for="offer-details-tb"
+            [class.active]="isLabelActive['offer-details-tb']"
+            ><span style="color: var(--red)">*</span>Description:</label
+          >
+          <span
+            class="invalid-txtArea"
+            *ngIf="
+              !offerForm.get('offerDetails').valid &&
+              offerForm.get('offerDetails').touched
+            "
+            >Invalid description.</span
+          >
+        </div>
+        <div class="form-block-submit-offer">
+          <input
+            type="submit"
+            value="Send"
+            id="rent-offer-submit-btn"
+            [disabled]="!offerForm.valid || offerForm.untouched"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

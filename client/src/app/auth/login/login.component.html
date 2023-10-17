@@ -1,0 +1,66 @@
+<div class="modal-wrapper">
+  <div class="modal" [@scaleAnimation]>
+    <div class="form-holder">
+      <h2>Login</h2>
+      <hr class="style-1" />
+      <div class="close-mark-modal-form" (click)="onClosingModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <form
+        id="login-form"
+        [formGroup]="loginForm"
+        (ngSubmit)="onLoginSubmit()"
+      >
+        <div class="form-block">
+          <input
+            type="email"
+            id="email-tb"
+            formControlName="email"
+            (keyup)="onInputKeyup('email-tb', $event.target.value)"
+          />
+          <label for="email-tb" [class.active]="isLabelActive['email-tb']"
+            ><span style="color: var(--red)">*</span>Email:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !loginForm.get('email').valid && loginForm.get('email').touched
+            "
+            >Invalid email.</span
+          >
+        </div>
+        <div class="form-block">
+          <input
+            type="password"
+            id="password-tb"
+            formControlName="password"
+            (keyup)="onInputKeyup('password-tb', $event.target.value)"
+          />
+          <label for="password-tb" [class.active]="isLabelActive['password-tb']"
+            ><span style="color: var(--red)">*</span>Password:</label
+          >
+          <span
+            class="invalid-input"
+            *ngIf="
+              !loginForm.get('password').valid &&
+              loginForm.get('password').touched
+            "
+            >Ivalid password.</span
+          >
+        </div>
+        <div class="form-block login-submit-block">
+          <input
+            type="submit"
+            id="login-submit-btn"
+            value="Login"
+            [disabled]="!loginForm.valid || loginForm.untouched"
+          />
+        </div>
+      </form>
+    </div>
+    <a class="a-reg" (click)="onSwitchToRegModal()"
+      >Don't have an account? Register &rarr;</a
+    >
+  </div>
+</div>
+<div class="backdrop"></div>
