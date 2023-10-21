@@ -9,6 +9,7 @@ const {
   squareFootageRegex,
 } = require("../regex");
 const { ValidationError, MissingFiledsError } = require("../error");
+const { config } = require("../config");
 
 // CurrentDate
 const currDate = getCurrentDate();
@@ -28,7 +29,7 @@ function isValidSquareFootage(footage) {
 }
 
 // ASYNC FUNCTIONS
-async function getFeaturedProducts(req, res) {
+async function getFeaturedProducts(req, res) {   
   try {
     const { userId } = req.params;
 

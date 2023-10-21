@@ -133,7 +133,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe({
               next: (response: { message: string }) => {
                 this.productService
-                  .getCategoryProducts(this.categoryId, this.userId)
+                  .getCategoryProducts([this.categoryId], this.userId)
                   .subscribe((products: any) => {
                     this.products = products;
                   });
@@ -165,7 +165,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe({
               next: (response: { message: string }) => {
                 this.productService
-                  .getCategoryProducts(this.categoryId, this.userId)
+                  .getCategoryProducts([this.categoryId], this.userId)
                   .subscribe((products: any) => {
                     this.products = products;
                   });

@@ -11,9 +11,12 @@ import { Subscription, filter, finalize } from 'rxjs';
 
 // INTERFACES
 import { Category } from 'src/app/interfaces/category.interface';
+import { UserData } from 'src/app/interfaces/user-data.interface';
+import { AuthService } from 'src/app/services/auth.service';
 
 // SERVICES
 import { LoadingService } from 'src/app/services/loading.service';
+import { ProductService } from 'src/app/services/product.service';
 import { ShopService } from 'src/app/services/shop.service';
 
 @Component({
@@ -37,18 +40,25 @@ export class FiltersComponent implements OnInit, OnDestroy {
   tags: { tag_name: string; product_count: number }[] = [];
   selectedBrands: [] | any = [];
   selectedTags: [] | any = [];
+  selectedCategories: [] | any = [];
+  userId: number = 0;
 
   constructor(
     private shopService: ShopService,
     private route: ActivatedRoute,
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private productService: ProductService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.route.params.subscribe((params: Params) => {
         this.activeCategory = +params.categoryId;
+      }),
+      this.authService.getUserData().subscribe((userData: UserData) => {
+        if (userData === null) this.userId = 0;
+        else this.userId = userData.idUser;
       })
     );
 
@@ -66,25 +76,42 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
     filterHeaders.forEach((el: HTMLElement) => {
       setTimeout(() => {
-        toggleFilters(el);
+        this.toggleFilters(el);
       }, 500);
-
       el.addEventListener('click', () => {
         el.classList.toggle('active');
 
-        toggleFilters(el);
+        this.toggleFilters(el);
       });
     });
+  }
 
-    function toggleFilters(el: HTMLElement): void {
+  toggleFilters(el: HTMLElement): void {
+    const holder = el.nextElementSibling as HTMLElement;
+
+    if (el.classList.contains('active')) {
+      holder.style.maxHeight = holder.scrollHeight + 'px';
+    } else {
+      holder.style.maxHeight = 0 + 'px';
+    }
+  }
+
+  refreshFiltersHeight(): void {
+    const filterHeaders =
+      this.elementRef.nativeElement.querySelectorAll('.filter-header');
+
+    filterHeaders.forEach((el: HTMLElement) => {
       const holder = el.nextElementSibling as HTMLElement;
 
       if (el.classList.contains('active')) {
-        holder.style.maxHeight = holder.scrollHeight + 'px';
-      } else {
+        el.classList.remove('active');
         holder.style.maxHeight = 0 + 'px';
+        setTimeout(() => {
+          el.classList.add('active');
+          holder.style.maxHeight = holder.scrollHeight + 'px';
+        }, 20);
       }
-    }
+    });
   }
 
   getProducts(): void {
@@ -93,6 +120,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.productsInit = data;
       }
       this.products = data;
+    });
+
+    this.shopService.getProductsInit().subscribe((data: any) => {
+      console.log(`ProductsInit subscribed`, data);
+      this.productsInit = data;
     });
   }
 
@@ -195,7 +227,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.minPriceChanged = +this.minPriceInput.nativeElement.ariaValueText;
     }
 
-    this.products = this.checkTheProductPrice(this.productsInit);
+    if (this.products.length !== 0) {
+      this.products = this.checkTheProductPrice(this.productsInit);
+    } else {
+      this.products = this.checkTheProductPrice(this.productsInit);
+    }
 
     this.shopService.setProducts(this.products);
 
@@ -222,7 +258,47 @@ export class FiltersComponent implements OnInit, OnDestroy {
     });
   }
 
+  onFilterCategoriesChange(): void {
+    this.selectedCategories = [];
+
+    const categories = this.elementRef.nativeElement.querySelectorAll(
+      '.tb-categories:checked'
+    );
+
+    categories.forEach((el: any) => {
+      this.selectedCategories.push(+el.value);
+    });
+    if (this.selectedCategories.length === 0) return;
+    this.productService
+      .getCategoryProducts(this.selectedCategories, this.userId)
+      .subscribe((products: any) => {
+        let productsArr = products;
+
+        productsArr = productsArr.map((product: any) => {
+          return {
+            ...product,
+            tag_names:
+              typeof product.tag_names === 'string'
+                ? product.tag_names.split(',')
+                : [],
+          };
+        });
+
+        this.products = productsArr;
+
+        this.shopService.setProducts(this.products);
+        this.shopService.setProductsInit(this.products);
+
+        this.priceRangeInit();
+        this.getTags();
+        this.getAllActiveBrands();
+        this.refreshFiltersHeight();
+      });
+  }
+
   checkTheSelectedFilters(productsArr: any[]): any {
+    // CHECKING CATEGORIES FILTERS
+
     // CHECKING BRAND FILTERS
     this.selectedBrands = [];
 
@@ -254,7 +330,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     return productsArr;
   }
 
-  onBrandsChange(event: any): void {
+  onBrandsChange(): void {
     this.products = this.checkTheSelectedFilters(this.products);
 
     this.products = this.checkTheProductPrice(this.products);
@@ -262,7 +338,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.shopService.setProducts(this.products);
   }
 
-  onTagsChange(event: any): void {
+  onTagsChange(): void {
     this.products = this.checkTheSelectedFilters(this.products);
 
     this.products = this.checkTheProductPrice(this.products);

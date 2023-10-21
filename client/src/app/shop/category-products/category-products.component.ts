@@ -25,9 +25,10 @@ export class CategoryProductsComponent implements OnInit {
           tag_names:
             typeof product.tag_names === 'string'
               ? product.tag_names.split(',')
-              : product.tag_names,
+              : [],
         };
       });
+      
       this.shopService.setProductsInit(products);
     });
   }

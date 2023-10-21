@@ -31,7 +31,7 @@ export class CategoryProductsResolver {
           this.userId = userData.idUser;
         }
         const categoryId = +route.params.categoryId;
-        return this.productService.getCategoryProducts(categoryId, this.userId);
+        return this.productService.getCategoryProducts([categoryId], this.userId);
       })
     );
   };

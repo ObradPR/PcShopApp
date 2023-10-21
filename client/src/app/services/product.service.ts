@@ -17,9 +17,13 @@ export class ProductService {
     return this.dataService.get(`featured-products/${userId}`);
   }
 
-  getCategoryProducts(categoryId: number, userId: number): Observable<any> {
-    return this.dataService.get(
-      `shop/get-category-products/${categoryId}/${userId}`
+  getCategoryProducts(categoryIds: number[], userId: number): Observable<any> {
+    return this.dataService.post(
+      `shop/get-category-products`,
+      { 
+        categories: categoryIds, 
+        userId
+      }
     );
   }
 }
