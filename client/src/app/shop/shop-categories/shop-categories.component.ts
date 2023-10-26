@@ -9,6 +9,7 @@ import { Subscription, finalize } from 'rxjs';
 
 // INTERFACES
 import { Category } from 'src/app/interfaces/category.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // SERVICES
 import { LoadingService } from 'src/app/services/loading.service';
@@ -62,8 +63,7 @@ export class ShopCategoriesComponent implements OnInit, OnDestroy {
             });
           }
         },
-        error: (err: any) => {
-          console.log(err);
+        error: (err: AppError) => {
           this.categories = [];
           this.categoriesErrorMessage = this.errorHandlingService.errorMessage(
             err.error.message,

@@ -123,7 +123,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     });
 
     this.shopService.getProductsInit().subscribe((data: any) => {
-      console.log(`ProductsInit subscribed`, data);
       this.productsInit = data;
     });
   }

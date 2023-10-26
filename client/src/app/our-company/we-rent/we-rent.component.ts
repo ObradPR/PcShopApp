@@ -9,6 +9,7 @@ import { InfoService } from 'src/app/services/info.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 
 // INTERFACES
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 @Component({
   selector: 'app-we-rent',
@@ -110,8 +111,7 @@ export class WeRentComponent implements OnInit {
           this.msgModalService.setModal('success', response.message);
           this.offerForm.reset();
         },
-        error: (err: any) => {
-          console.log(err);
+        error: (err: AppError) => {
           this.msgModalService.setModal('error', err.error.message);
         },
       });

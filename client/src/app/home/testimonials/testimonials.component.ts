@@ -8,6 +8,7 @@ import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 
 // INTERFACES
 import { Testimonial } from 'src/app/interfaces/testimonial.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 @Component({
   selector: 'app-testimonials',
@@ -42,12 +43,11 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
         next: (data: Testimonial[]) => {
           this.testimonials = data;
         },
-        error: (err: any) => {
+        error: (err: AppError) => {
           this.testimonialErrorMessage = this.errorHandlingService.errorMessage(
             err.error.message,
             err.status
           );
-          console.log(err);
         },
       });
   }

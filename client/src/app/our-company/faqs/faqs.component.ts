@@ -3,6 +3,7 @@ import { Subscription, finalize } from 'rxjs';
 
 // INTERFACES
 import { Faq } from 'src/app/interfaces/faq.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // SERVICES
 import { LoadingService } from 'src/app/services/loading.service';
@@ -43,7 +44,7 @@ export class FaqsComponent implements OnInit, OnDestroy {
         next: (data: Faq[]) => {
           this.faqs = data;
         },
-        error: (err: any) => {
+        error: (err: AppError) => {
           this.faqErrorMessage = this.errorHandlingService.errorMessage(
             err.error.message,
             err.status

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ErrorHandlingService {
-  errorMessage(content: string, statusCode: string): string {
+  errorMessage(content: string, statusCode: number): string {
     return `${content} with the status of ${statusCode}`;
   }
 }

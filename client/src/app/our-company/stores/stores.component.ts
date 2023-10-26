@@ -4,6 +4,7 @@ import { Subscription, finalize } from 'rxjs';
 
 // INTERFACES
 import { Store } from 'src/app/interfaces/store.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // SERVICES
 import { InfoService } from 'src/app/services/info.service';
@@ -72,12 +73,11 @@ export class StoresComponent implements OnInit, OnDestroy {
 
           this.filteredStores = this.stores = data;
         },
-        error: (err: any) => {
+        error: (err: AppError) => {
           this.storeErrorMessage = this.errorHandlingService.errorMessage(
             err.error.message,
             err.status
           );
-          console.log(err);
         },
       });
   }

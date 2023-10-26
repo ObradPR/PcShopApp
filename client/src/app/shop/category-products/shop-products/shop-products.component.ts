@@ -10,6 +10,7 @@ import {
 import { Subscription, finalize, take } from 'rxjs';
 
 // INTERFACES
+import { AppError } from 'src/app/interfaces/app-error.interface';
 import { UserData } from 'src/app/interfaces/user-data.interface';
 
 // SERVICES
@@ -147,8 +148,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.wishlistService.setWishlistItemsChangeStatus(!status);
                   });
               },
-              error: (err: any) => {
-                console.log(err);
+              error: (err: AppError) => {
                 this.msgModalService.setModal('error', err.error.message);
               },
             })
@@ -179,8 +179,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.wishlistService.setWishlistItemsChangeStatus(!status);
                   });
               },
-              error: (err: any) => {
-                console.log(err);
+              error: (err: AppError) => {
                 this.msgModalService.setModal('error', err.error.message);
               },
             })

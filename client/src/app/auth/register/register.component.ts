@@ -9,6 +9,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 
 // INTERFACES
 import { UserData } from 'src/app/interfaces/user-data.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // ANIMATIONS
 import { scaleAnimation } from 'src/app/shared/animations';
@@ -86,8 +87,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.regForm.reset();
           this.authService.onToggleAuthModals();
         },
-        error: (err: any) => {
-          console.log(err);
+        error: (err: AppError) => {
           this.msgModalService.setModal('error', err.error.message);
         },
       });

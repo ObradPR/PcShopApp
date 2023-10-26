@@ -9,6 +9,7 @@ import { MessageModalService } from 'src/app/services/message-modal.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 // INTERFACES
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // ANIMATIONS
 import { scaleAnimation } from 'src/app/shared/animations';
@@ -68,8 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loginForm.reset();
           this.onClosingModal();
         },
-        error: (err: any) => {
-          console.log(err);
+        error: (err: AppError) => {
           this.msgModalService.setModal('error', err.error.message);
         },
       });

@@ -29,7 +29,7 @@ function isValidSquareFootage(footage) {
 }
 
 // ASYNC FUNCTIONS
-async function getFeaturedProducts(req, res) {   
+async function getFeaturedProducts(req, res) {
   try {
     const { userId } = req.params;
 
@@ -327,6 +327,28 @@ async function getPaymentTypes(req, res) {
   }
 }
 
+async function getPopularCategories(req, res) {
+  try {
+    const pool = await createPool();
+
+    const result = await pool.query(`
+        SELECT TOP(3)
+          c.id_category,
+          c.category_name,
+          c.category_description,
+          ci.src
+        FROM categories c INNER JOIN category_images ci ON c.id_category = ci.id_category
+        WHERE c.popular = 1;
+      `);
+
+    const popularCategories = result.recordset;
+
+    res.status(200).json(popularCategories);
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
 // =============================
 
 function errorHandler(err, res) {
@@ -360,4 +382,5 @@ module.exports = {
   getRepairServices,
   getStoresInfo,
   getPaymentTypes,
+  getPopularCategories,
 };

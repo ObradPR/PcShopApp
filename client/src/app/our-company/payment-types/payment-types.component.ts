@@ -8,6 +8,7 @@ import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 
 // INTERFACES
 import { PaymentType } from 'src/app/interfaces/payment-type.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 @Component({
   selector: 'app-payment-types',
@@ -44,14 +45,12 @@ export class PaymentTypesComponent implements OnInit, OnDestroy {
         next: (data: PaymentType[]) => {
           this.paymentTypes = data;
         },
-        error: (err: any) => {
+        error: (err: AppError) => {
           this.paymentTypesErrorMessage =
             this.errorHandlingService.errorMessage(
               err.error.message,
               err.status
             );
-
-          console.log(err);
         },
       });
   }

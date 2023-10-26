@@ -11,6 +11,7 @@ import { Faq } from '../interfaces/faq.interface';
 import { RepairService } from '../interfaces/repair-service.interface';
 import { Store } from '../interfaces/store.interface';
 import { PaymentType } from '../interfaces/payment-type.interface';
+import { Category } from '../interfaces/category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,9 @@ export class InfoService {
 
   getPaymentTypes(): Observable<PaymentType[]> {
     return this.dataService.get('payment-types');
+  }
+
+  getPopularCategories(): Observable<Category[]>{
+    return this.dataService.get('popular-categories');
   }
 }

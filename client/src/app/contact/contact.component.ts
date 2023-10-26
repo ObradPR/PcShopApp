@@ -14,6 +14,7 @@ import { InfoService } from '../services/info.service';
 import { MessageModalService } from '../services/message-modal.service';
 
 // INTERFACES
+import { AppError } from '../interfaces/app-error.interface';
 
 @Component({
   selector: 'app-contact',
@@ -98,8 +99,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.msgModalService.setModal('success', response.message);
           this.contactForm.reset();
         },
-        error: (err: any) => {
-          console.log(err);
+        error: (err: AppError) => {
           this.msgModalService.setModal('error', err.error.message);
         },
       });

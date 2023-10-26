@@ -2,60 +2,45 @@
   <h2>The most popular categories</h2>
   <hr class="style-1" />
   <div id="popular-categories-holder">
-    <div class="popular-category-block">
-      <div class="category-img">
-        <img
-          src="../../../assets/img/AMD Ryzen 5 2600 Processor_1690206963.png"
-          alt="Socket AM4 Multi-core processor Central processing unit AMD Ryzen 5 2600 Processor with Wraith Stealth Cooler YD2600BBAFBOX"
-        />
+    <ng-container *ngIf="popularCategories.length > 0; else noCategories">
+      <div
+        class="popular-category-block"
+        *ngFor="let category of popularCategories"
+      >
+        <div class="category-img">
+          <img
+            src="../../../assets/img/{{ category.src }}"
+            [alt]="category.category_name"
+          />
+        </div>
+        <div class="popular-categories-info">
+          <h3>{{ category.category_name }}</h3>
+          <p>
+            {{ category.category_description }}
+          </p>
+          <a
+            routerLink="/shop/products/{{ category.id_category }}"
+            class="a-btn"
+            >Check</a
+          >
+        </div>
       </div>
-      <div class="popular-categories-info">
-        <h3>Processor</h3>
-        <p>
-          Processors, often referred to as the "brain" of a computer, play a
-          crucial role in determining overall system performance. They are
-          responsible for executing instructions and calculations, influencing
-          tasks such as multitasking, gaming, content creation, and running
-          demanding software applications.
-        </p>
-        <a href="#" class="a-btn">Check</a>
-      </div>
-    </div>
-    <div class="popular-category-block">
-      <div class="category-img">
-        <img
-          src="../../../assets/img/TridentZ DDR4 16GB_1690206963.png"
-          alt="TridentZ DDR4 SDRAM G.Skill DIMM Patriot Memory Patriot Stellar Boost XT"
-        />
-      </div>
-      <div class="popular-categories-info">
-        <h3>Ram memory</h3>
-        <p>
-          RAM (Random Access Memory) is a crucial component of a computer system
-          that provides temporary storage for data that the processor needs to
-          access quickly. One key aspect of RAM is its speed, measured in
-          megahertz (MHz) or gigahertz (GHz).
-        </p>
-        <a href="#" class="a-btn">Check</a>
-      </div>
-    </div>
-    <div class="popular-category-block">
-      <div class="category-img">
-        <img
-          src="../../../assets/img/Macintosh Notebook Laptop_1690206963.png"
-          alt="Macintosh Notebook Samsung Laptop"
-        />
-      </div>
-      <div class="popular-categories-info">
-        <h3>Laptops</h3>
-        <p>
-          Laptops offer portable computing power, allowing users to work, study,
-          create, and play from anywhere. They combine performance and mobility,
-          making them an essential tool for professionals, students, and casual
-          users alike.
-        </p>
-        <a href="#" class="a-btn">Check</a>
-      </div>
-    </div>
+    </ng-container>
+    <ng-template #noCategories>
+      <ng-container *ngIf="popularCategoriesErrorMessage; else noContent">
+        <div class="center-block">
+          <div class="error-handling-block">
+            <p>{{ popularCategoriesErrorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noContent>
+        <div class="center-block">
+          <div class="no-content-block">
+            <p>There are no popular categories currrently.</p>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
   </div>
 </div>

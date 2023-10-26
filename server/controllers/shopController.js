@@ -121,7 +121,6 @@ async function getCategory(req, res) {
 
 async function getCategoryProducts(req, res) {
   try {
-    console.log(req.body)
     let { categories, userId } = req.body;
     
     if (categories.length === 0) {
@@ -325,7 +324,7 @@ async function getAllCategories(req, res) {
     `);
 
     const categories = result.recordset;
-    console.log(categories)
+
     res.status(200).json(categories);
   } catch (err) {
     internalServerError(err, res);

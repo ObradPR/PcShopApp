@@ -19,6 +19,7 @@ import { MessageModalService } from 'src/app/services/message-modal.service';
 // INTERFACES
 import { FeaturedProduct } from 'src/app/interfaces/featured-product.interface';
 import { UserData } from 'src/app/interfaces/user-data.interface';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 @Component({
   selector: 'app-featured-products',
@@ -307,8 +308,7 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
                     this.wishlistService.setWishlistItemsChangeStatus(!status);
                   });
               },
-              error: (err: any) => {
-                console.log(err);
+              error: (err: AppError) => {
                 this.msgModalService.setModal('error', err.error.message);
               },
             })
@@ -339,8 +339,7 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
                     this.wishlistService.setWishlistItemsChangeStatus(!status);
                   });
               },
-              error: (err: any) => {
-                console.log(err);
+              error: (err: AppError) => {
                 this.msgModalService.setModal('error', err.error.message);
               },
             })

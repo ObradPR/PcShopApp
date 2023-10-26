@@ -9,6 +9,7 @@ import { MessageModalService } from '../services/message-modal.service';
 
 // INTERFACES
 import { WishlistItem } from '../interfaces/wishlist-item.interface';
+import { AppError } from '../interfaces/app-error.interface';
 
 @Component({
   selector: 'app-wishlist',
@@ -71,8 +72,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
                 this.wishlistService.setWishlistItemsChangeStatus(!status);
               });
           },
-          error: (err: any) => {
-            console.log(err);
+          error: (err: AppError) => {
             this.msgModalService.setModal('error', err.error.message);
           },
         })

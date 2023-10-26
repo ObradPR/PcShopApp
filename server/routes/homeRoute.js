@@ -16,5 +16,6 @@ router.route("/faqs").get(homeController.getFaqs);
 router.route("/repair-service").get(homeController.getRepairServices);
 router.route("/stores").get(homeController.getStoresInfo);
 router.route("/payment-types").get(homeController.getPaymentTypes);
+router.route("/popular-categories").get(homeController.getPopularCategories);
 
 module.exports = router;

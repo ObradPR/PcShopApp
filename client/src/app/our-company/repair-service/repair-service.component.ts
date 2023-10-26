@@ -5,6 +5,7 @@ import { Subscription, finalize } from 'rxjs';
 import { RepairService } from 'src/app/interfaces/repair-service.interface';
 import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 import { InfoService } from 'src/app/services/info.service';
+import { AppError } from 'src/app/interfaces/app-error.interface';
 
 // SERVICES
 import { LoadingService } from 'src/app/services/loading.service';
@@ -43,12 +44,11 @@ export class RepairServiceComponent implements OnInit {
         next: (data: RepairService[]) => {
           this.repairServices = data;
         },
-        error: (err: any) => {
+        error: (err: AppError) => {
           this.repairErrorMessage = this.errorHandlingService.errorMessage(
             err.error.message,
             err.status
           );
-          console.log(err);
         },
       });
   }
