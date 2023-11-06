@@ -60,3 +60,13 @@ hr {
 .filter-header.active::after {
   transform: rotate(180deg);
 }
+
+@media (max-width: 918px) {
+  .filter-block {
+    margin: 0 auto;
+  }
+
+  hr {
+    margin: 0 auto;
+  }
+}

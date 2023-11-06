@@ -4,3 +4,6 @@ h2 {
 hr {
   margin-bottom: 2rem;
 }
+.wrapper {
+  width: 80%;
+}
