@@ -81,7 +81,7 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
     );
   }
 
-  setWishlistHeartInfo(status: boolean, count: number): void {
+  setWishlistHeartInfo(status: boolean, count?: number): void {
     this.checkWishlist = status;
     this.wishlistItemsCount = count;
   }
@@ -93,6 +93,7 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
       'error',
       'We are sad to see you go 😟. If you had a bad experience you can share with us through contact form.'
     );
+    this.setWishlistHeartInfo(false, 0);
   }
 
   onToggleNavigation() {

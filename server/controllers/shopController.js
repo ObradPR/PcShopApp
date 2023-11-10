@@ -122,7 +122,7 @@ async function getCategory(req, res) {
 async function getCategoryProducts(req, res) {
   try {
     let { categories, userId } = req.body;
-    
+
     if (categories.length === 0) {
       throw new MissingFiledsError("Category is unknown, try again!", 400);
     }
@@ -134,14 +134,14 @@ async function getCategoryProducts(req, res) {
     const pool = await createPool();
 
     // Conctruct an array for parameters for the IN clause
-    const categoryIdParameters = categories.map((categoryId, i) =>({
+    const categoryIdParameters = categories.map((categoryId, i) => ({
       name: `categoryId${i}`,
       type: sql.SmallInt(),
       value: categoryId,
-    }))
+    }));
 
     // Construct the SQL query with dynamic parameters
-    const query = ` SELECT
+    const query = `SELECT
     p.id_product,
     p.product_name,
     pi.src,
@@ -150,23 +150,27 @@ async function getCategoryProducts(req, res) {
     dp.discount_price,
     dp.discount_value,
     dp.saved,
-    CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist,
+    ${
+      userId
+        ? `CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist,`
+        : `CONVERT(BIT, 0) AS in_wishlist,`
+    }
     b.brand_name,
     b.id_brand,
     c.category_name,
     c.id_category,
     p.avg_rating
-  FROM products p
-  INNER JOIN  product_images pi ON p.id_product = pi.id_product
-  INNER JOIN cat_brands cb ON cb.id_cat_brand = p.id_cat_brand
-  INNER JOIN categories c ON cb.id_category = c.id_category
-  INNER JOIN brands b ON cb.id_brand = b.id_brand
-  LEFT JOIN (
-    SELECT id_product, product_price
-    FROM prices
-    WHERE price_date_till IS NULL
+    FROM products p
+    INNER JOIN  product_images pi ON p.id_product = pi.id_product
+    INNER JOIN cat_brands cb ON cb.id_cat_brand = p.id_cat_brand
+    INNER JOIN categories c ON cb.id_category = c.id_category
+    INNER JOIN brands b ON cb.id_brand = b.id_brand
+    LEFT JOIN (
+      SELECT id_product, product_price
+      FROM prices
+      WHERE price_date_till IS NULL
       AND price_date_from <= '${currDate}'
-  ) pr ON p.id_product = pr.id_product
+      ) pr ON p.id_product = pr.id_product
   OUTER APPLY(
     SELECT TOP 1 dp.discount_price, dp.discount_value, dp.saved
     FROM discount_prices dp
@@ -184,9 +188,13 @@ async function getCategoryProducts(req, res) {
     WHERE pt1.product_tag_active = 1
   ) t ON p.id_product = t.id_product
   LEFT JOIN wishlists_products wp ON p.id_product = wp.id_product
-  LEFT JOIN wishlists w ON wp.id_wishlist = w.id_wishlist AND w.id_user = '${userId}'
-  WHERE c.id_category IN (${categoryIdParameters.map(param => `@${param.name}`).join(',')})
-  GROUP BY
+  LEFT JOIN wishlists w ON wp.id_wishlist = w.id_wishlist ${
+    userId ? `AND w.id_user = '${userId}'` : ``
+  }
+  WHERE c.id_category IN (${categoryIdParameters
+    .map((param) => `@${param.name}`)
+    .join(",")})
+    GROUP BY
     p.id_product,
     p.product_name,       
     pi.src,       
@@ -194,103 +202,22 @@ async function getCategoryProducts(req, res) {
     dp.discount_price,
     dp.discount_value,
     dp.saved,
-    wp.id_product,
+    ${userId ? `wp.id_product,` : ""}
     b.brand_name,
     b.id_brand,
     c.category_name,
     c.id_category,
     p.avg_rating
-`;
+    `;
 
     // Create a request and add the parameters
     const request = pool.request();
-    categoryIdParameters.forEach(param =>{
+    categoryIdParameters.forEach((param) => {
       request.input(param.name, param.type, param.value);
-    })
+    });
 
     // Execute the query
     const result = await request.query(query);
-
-    // const result = await pool
-    //   .request()
-    //   .input("categoryId", sql.SmallInt(), categories).query(`
-    //     SELECT
-    //     p.id_product,
-    //     p.product_name,
-    //     pi.src,
-    //     STRING_AGG(t.tag_name, ',') AS tag_names,
-    //     pr.product_price,
-    //     dp.discount_price,
-    //     dp.discount_value,
-    //     dp.saved,
-    //     CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist,
-    //     b.brand_name,
-    //     b.id_brand,
-    //     c.category_name,
-    //     c.id_category,
-    //     p.avg_rating
-    //   FROM products p
-    //   INNER JOIN  product_images pi ON p.id_product = pi.id_product
-    //   INNER JOIN cat_brands cb ON cb.id_cat_brand = p.id_cat_brand
-    //   INNER JOIN categories c ON cb.id_category = c.id_category
-    //   INNER JOIN brands b ON cb.id_brand = b.id_brand
-    //   LEFT JOIN (
-    //     SELECT id_product, product_price
-    //     FROM prices
-    //     WHERE price_date_till IS NULL
-    //       AND price_date_from <= '${currDate}'
-    //   ) pr ON p.id_product = pr.id_product
-    //   OUTER APPLY(
-    //     SELECT TOP 1 dp.discount_price, dp.discount_value, dp.saved
-    //     FROM discount_prices dp
-    //     INNER JOIN prices pr2 ON dp.id_price = pr2.id_price
-    //     INNER JOIN discount_durations dd ON dp.id_discount_duration = dd.id_discount_duration
-    //     WHERE pr2.id_product = p.id_product
-    //       AND dd.discount_date_from <= '${currDate}'
-    //       AND dd.discount_date_till > '${currDate}'
-    //     ORDER BY dd.discount_date_from DESC
-    //   ) dp
-    //   LEFT JOIN (
-    //     SELECT pt1.id_product, t.tag_name
-    //     FROM products_tags pt1
-    //     LEFT JOIN tags t ON t.id_tag = pt1.id_tag
-    //     WHERE pt1.product_tag_active = 1
-    //   ) t ON p.id_product = t.id_product
-    //   LEFT JOIN wishlists_products wp ON p.id_product = wp.id_product
-    //   LEFT JOIN wishlists w ON wp.id_wishlist = w.id_wishlist AND w.id_user = '${userId}'
-    //   WHERE c.id_category IN ('${categoryIds}')
-    //   GROUP BY
-    //     p.id_product,
-    //     p.product_name,       
-    //     pi.src,       
-    //     pr.product_price,
-    //     dp.discount_price,
-    //     dp.discount_value,
-    //     dp.saved,
-    //     wp.id_product,
-    //     b.brand_name,
-    //     b.id_brand,
-    //     c.category_name,
-    //     c.id_category,
-    //     p.avg_rating
-    // `);
-
-    // LEFT JOIN (
-    //   SELECT pt1.*
-    //   FROM products_tags pt1
-    //   LEFT JOIN products_tags pt2 ON pt1.id_product = pt2.id_product
-    //   AND pt1.product_tag_date_till < pt2.product_tag_date_till
-    //   WHERE pt2.id_product IS NULL
-    // ) pt ON p.id_product = pt.id_product
-
-    // LEFT JOIN tags t ON t.id_tag = pt.id_tag
-
-    // SELECT pt1.id_product,
-    //       STRING_AGG(t.tag_name, ', ') AS tag_name
-    //     FROM products_tags pt1
-    //     LEFT JOIN tags t ON t.id_tag = pt1.id_tag
-    //     WHERE pt1.product_tag_date_till = (SELECT MAX(product_tag_date_till) FROM products_tags pt2 WHERE pt1.id_product = pt2.id_product)
-    //     GROUP BY pt1.id_product
 
     const products = result.recordset;
 

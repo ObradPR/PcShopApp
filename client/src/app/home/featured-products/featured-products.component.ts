@@ -102,6 +102,7 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
                 };
               }
             );
+            console.log(this.featuredProducts);
             this.maxSliderProducts = this.featuredProducts.length;
           },
           error: (err) => {

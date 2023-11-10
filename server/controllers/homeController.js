@@ -49,7 +49,11 @@ async function getFeaturedProducts(req, res) {
         dp.discount_price,
         dp.discount_value,
         dp.saved,
-        CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist
+        ${
+          +userId
+            ? `CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist`
+            : `CONVERT(BIT, 0) AS in_wishlist`
+        }
       FROM featured_products fp
       INNER JOIN products p ON p.id_product = fp.id_product
       INNER JOIN product_images pi ON p.id_product = pi.id_product
@@ -78,7 +82,9 @@ async function getFeaturedProducts(req, res) {
       ) pt ON p.id_product = pt.id_product
       LEFT JOIN tags t ON t.id_tag = pt.id_tag
       LEFT JOIN wishlists_products wp ON p.id_product = wp.id_product
-      LEFT JOIN wishlists w ON wp.id_wishlist = w.id_wishlist AND w.id_user = '${userId}'
+      LEFT JOIN wishlists w ON wp.id_wishlist = w.id_wishlist ${
+        +userId ? `AND w.id_user = '${userId}'` : ``
+      }
       WHERE fp.featured_date_till > '${currDate}'
       GROUP BY        
         p.id_product,
@@ -90,7 +96,7 @@ async function getFeaturedProducts(req, res) {
         dp.discount_price,
         dp.discount_value,
         dp.saved,
-        wp.id_product
+        ${userId ? `wp.id_product` : ""}
       ORDER BY fp.priority;
     `);
     const featuredProducts = result.recordset;

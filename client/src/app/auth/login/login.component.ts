@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription, finalize } from 'rxjs';
+import { Subscription, finalize, take } from 'rxjs';
 
 // SERVICES
 import { AuthService } from 'src/app/services/auth.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { WishlistService } from 'src/app/services/wishlist.service';
 
 // INTERFACES
 import { AppError } from 'src/app/interfaces/app-error.interface';
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private loadingService: LoadingService,
     private msgModalService: MessageModalService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +57,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       .loginUser(this.loginForm.value)
       .pipe(
         finalize(() => {
+          this.wishlistService
+            .getWishlistItemsChangeStatus()
+            .pipe(take(1))
+            .subscribe((status: boolean) => {
+              this.wishlistService.setWishlistItemsChangeStatus(!status);
+            });
+
           this.loadingService.setPageLoading(false);
         })
       )
