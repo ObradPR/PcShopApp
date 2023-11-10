@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
+import { ProductService } from 'src/app/services/product.service';
 
 // INTERFACES
 import { UserData } from 'src/app/interfaces/user-data.interface';
@@ -31,13 +32,15 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   checkWishlist: boolean = false;
   wishlistItemsCount: number = 0;
   navMenu: HTMLElement;
+  searchProducts: string = '';
 
   constructor(
     private authService: AuthService,
     private msgModalService: MessageModalService,
     private router: Router,
     private wishlistService: WishlistService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private productService: ProductService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -111,6 +114,16 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
 
   onOpenRegisterModal() {
     this.authService.setRegisterVisibility(true);
+  }
+
+  onSearchProducts() {
+    if (this.searchProducts === '') return;
+
+    this.subscriptions.push(
+      this.productService
+        .getProductsBySearch(this.searchProducts)
+        .subscribe((data: any) => console.log(data))
+    );
   }
 
   ngOnDestroy(): void {

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 // SERVICES
@@ -65,6 +65,7 @@ export function jwtOptionsFactory() {
     OurCompanyModule,
     WishlistModule,
     ShopModule,
+    FormsModule
   ],
   providers: [JwtHelperService],
   bootstrap: [AppComponent],

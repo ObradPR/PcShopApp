@@ -355,6 +355,50 @@ async function getPopularCategories(req, res) {
   }
 }
 
+async function getProductsBySearch(req, res) {
+  try {
+    const { title } = req.params;
+
+    const pool = await createPool();
+
+    const result = await pool
+      .request()
+      .input("title", sql.NVarChar(), `%${title}%`).query(`
+      SELECT
+        p.id_product,
+        p.product_name,
+        pi.src,
+        pr.product_price,
+        dp.discount_price
+      FROM products p
+      INNER JOIN product_images pi ON p.id_product = pi.id_product
+      LEFT JOIN (
+        SELECT id_product, product_price
+        FROM prices
+        WHERE price_date_till IS NULL
+          AND price_date_from <= '${currDate}'
+      ) pr ON p.id_product = pr.id_product
+      OUTER APPLY(
+        SELECT TOP 1 dp.discount_price
+        FROM discount_prices dp
+        INNER JOIN prices pr2 ON dp.id_price = pr2.id_price
+        INNER JOIN discount_durations dd ON dp.id_discount_duration = dd.id_discount_duration
+        WHERE pr2.id_product = p.id_product
+          AND dd.discount_date_from <= '${currDate}'
+          AND dd.discount_date_till > '${currDate}'
+        ORDER BY dd.discount_date_from DESC
+      ) dp
+      WHERE p.product_name LIKE @title;
+    `);
+
+    const products = result.recordset;
+
+    res.status(200).json(products);
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
 // =============================
 
 function errorHandler(err, res) {
@@ -389,4 +433,5 @@ module.exports = {
   getStoresInfo,
   getPaymentTypes,
   getPopularCategories,
+  getProductsBySearch,
 };

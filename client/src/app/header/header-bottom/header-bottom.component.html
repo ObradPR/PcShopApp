@@ -9,6 +9,8 @@
       type="search"
       id="inputSearch"
       placeholder="Search your favourite products..."
+      [(ngModel)]="searchProducts"
+      (input)="onSearchProducts()"
     />
     <input type="button" value="Search" />
   </div>

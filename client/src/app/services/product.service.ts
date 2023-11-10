@@ -18,12 +18,13 @@ export class ProductService {
   }
 
   getCategoryProducts(categoryIds: number[], userId: number): Observable<any> {
-    return this.dataService.post(
-      `shop/get-category-products`,
-      { 
-        categories: categoryIds, 
-        userId
-      }
-    );
+    return this.dataService.post(`shop/get-category-products`, {
+      categories: categoryIds,
+      userId,
+    });
+  }
+
+  getProductsBySearch(title: string): Observable<any> {
+    return this.dataService.get(`products-by-search/${title}`);
   }
 }
