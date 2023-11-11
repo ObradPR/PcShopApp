@@ -9,10 +9,28 @@
       type="search"
       id="inputSearch"
       placeholder="Search your favourite products..."
-      [(ngModel)]="searchProducts"
+      [(ngModel)]="searchProductsText"
       (input)="onSearchProducts()"
     />
     <input type="button" value="Search" />
+    <div id="search-results">
+      <div *ngFor="let product of searchProducts" class="search-product-block">
+        <div class="search-product-img-holder">
+          <img
+            src="../../../assets/img/{{ product.src }}"
+            [alt]="product.product_name"
+          />
+        </div>
+        <p>{{ product.product_name }}</p>
+        <h4>
+          {{
+            product.discount_price
+              ? product.discount_price
+              : product.product_price
+          }}
+        </h4>
+      </div>
+    </div>
   </div>
   <div id="header-user-icons">
     <div class="header-user-icon">

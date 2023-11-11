@@ -32,7 +32,9 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   checkWishlist: boolean = false;
   wishlistItemsCount: number = 0;
   navMenu: HTMLElement;
-  searchProducts: string = '';
+  searchProductsText: string = '';
+  searchProducts: any = [];
+  searchProductsBlock: HTMLElement;
 
   constructor(
     private authService: AuthService,
@@ -57,6 +59,9 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenu = this.elementRef.nativeElement.querySelector(
       '#nav-menu'
+    ) as HTMLElement;
+    this.searchProductsBlock = this.elementRef.nativeElement.querySelector(
+      '#search-results'
     ) as HTMLElement;
 
     this.subscriptions.push(
@@ -117,12 +122,27 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   }
 
   onSearchProducts() {
-    if (this.searchProducts === '') return;
+    if (this.searchProductsText === '') {
+      this.searchProductsBlock.style.maxHeight = 0 + 'vh';
+
+      setTimeout(() => {
+        this.searchProducts = [];
+      }, 200);
+
+      return;
+    }
 
     this.subscriptions.push(
       this.productService
-        .getProductsBySearch(this.searchProducts)
-        .subscribe((data: any) => console.log(data))
+        .getProductsBySearch(this.searchProductsText)
+        .subscribe((data: any) => {
+          if (data.length === 0) {
+            this.searchProductsBlock.style.maxHeight = 0 + 'vh';
+          } else {
+            this.searchProducts = data;
+            this.searchProductsBlock.style.maxHeight = 80 + 'vh';
+          }
+        })
     );
   }
 
