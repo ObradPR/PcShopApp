@@ -1,1 +1,73 @@
-<p>cart works!</p>
+<div id="cart" class="wrapper padding-section">
+  <h2>You cart items</h2>
+  <hr class="style-1" />
+  <div id="cart-items-holder">
+    <ng-container *ngIf="items.length > 0; else empty">
+      <div class="cart-item-block-holder" *ngFor="let item of items">
+        <div class="cart-item-block">
+          <div class="item-img">
+            <img
+              [src]="'../../../assets/img/' + item.src"
+              [alt]="item.product_name"
+            />
+          </div>
+          <div class="item-info">
+            <h3>{{ item.product_name }}</h3>
+            <hr class="style-2" />
+            <div class="info-row">
+              <p>Rating: {{ item.avg_rating }}</p>
+              <p>Reviews: {{ item.count_reviews }}</p>
+            </div>
+          </div>
+          <div class="product--block-price">
+            <ng-container *ngIf="item.discount_price !== null; else elsePrice">
+              <p class="old-price">€{{ item.product_price }}</p>
+              <p class="current-price">€{{ item.discount_price }}</p>
+              <p class="saved-price">Saved: €{{ item.saved }}</p>
+            </ng-container>
+            <ng-template #elsePrice>
+              <p class="current-price">€{{ item.product_price }}</p>
+            </ng-template>
+          </div>
+        </div>
+        <div class="cart-item-action">
+          <div
+            class="p-container"
+            (click)="onChangeItemAmount('decrement', item.id_product)"
+          >
+            <p>-</p>
+          </div>
+          <p>{{ item.amount }}</p>
+          <div
+            class="p-container"
+            (click)="onChangeItemAmount('increment', item.id_product)"
+          >
+            <p>+</p>
+          </div>
+        </div>
+        <!-- <div class="heart-left-top">
+          <i class="fa-solid fa-heart"></i>
+        </div> -->
+        <div class="delete-right-top" (click)="onRemoveItem(item.id_product)">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #empty>
+      <ng-container *ngIf="cartItemsErrorMessage; else noContent">
+        <div class="center-block">
+          <div class="error-handling-block">
+            <p>{{ cartItemsErrorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noContent>
+        <div class="center-block">
+          <div class="no-content-block">
+            <p>Cart is empty.</p>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

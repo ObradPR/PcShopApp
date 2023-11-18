@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+// SERVICES
+import { LoadingService } from '../services/loading.service';
+
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
@@ -9,15 +12,35 @@ import { Subscription } from 'rxjs';
 })
 export class CartComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
+  items: [] = [];
+  cartItemsErrorMessage: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit(): void {
+    this.loadingService.setPageLoadingInit();
+
     this.subscriptions.push(
-      this.route.data.subscribe((data: { cartItems: any[] }) => {
-        console.log(data.cartItems);
+      this.route.data.subscribe((data: { cartItems: [] }) => {
+        this.items = data.cartItems;
+        this.loadingService.setPageLoading(false);
       })
     );
+  }
+
+  onRemoveItem(productId: number) {
+    // remove a product
+  }
+
+  onChangeItemAmount(how: string, productId: number) {
+    if (how === 'decrement') {
+      console.log('-');
+    } else if (how === 'increment') {
+      console.log('+');
+    }
   }
 
   ngOnDestroy(): void {
