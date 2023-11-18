@@ -13,6 +13,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
 import { ProductService } from 'src/app/services/product.service';
+import { CartService } from 'src/app/services/cart.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 // INTERFACES
 import { UserData } from 'src/app/interfaces/user-data.interface';
@@ -35,6 +37,7 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   searchProductsText: string = '';
   searchProducts: any = [];
   searchProductsBlock: HTMLElement;
+  cartItemsCount: number = 0;
 
   constructor(
     private authService: AuthService,
@@ -42,7 +45,9 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
     private router: Router,
     private wishlistService: WishlistService,
     private elementRef: ElementRef,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService,
+    private localStorageService: LocalStorageService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -85,6 +90,20 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
                 }
               });
           }
+        }),
+      this.cartService
+        .getCartItemsChangeStatus()
+        .subscribe((status: boolean) => {
+          const cartId = this.localStorageService.getCartId();
+          this.cartService
+            .getCartItems(this.userId, cartId)
+            .subscribe((items: any[]) => {
+              if (items.length > 0) {
+                this.setCartItemsInfo(items.length);
+              } else {
+                this.setCartItemsInfo(items.length);
+              }
+            });
         })
     );
   }
@@ -92,6 +111,10 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   setWishlistHeartInfo(status: boolean, count?: number): void {
     this.checkWishlist = status;
     this.wishlistItemsCount = count;
+  }
+
+  setCartItemsInfo(count: number): void {
+    this.cartItemsCount = count;
   }
 
   onLogout(): void {

@@ -15,6 +15,8 @@ import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { CartService } from 'src/app/services/cart.service';
 
 // INTERFACES
 import { FeaturedProduct } from 'src/app/interfaces/featured-product.interface';
@@ -60,7 +62,9 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
     private errorHandlingService: ErrorHandlingService,
     private authService: AuthService,
     private wishlistService: WishlistService,
-    private msgModalService: MessageModalService
+    private msgModalService: MessageModalService,
+    private localStorageService: LocalStorageService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -345,6 +349,64 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
             })
         );
       }
+    }
+  }
+
+  addProductToCart(productId: number) {
+    if (this.userId === 0) {
+      const cartId = this.localStorageService.getCartId();
+
+      if (!cartId) {
+        this.cartService.setProductInCart(productId).subscribe({
+          next: (response: { message: string; cartId: number }) => {
+            this.localStorageService.setCartId(response.cartId);
+
+            this.msgModalService.setModal('success', response.message);
+
+            this.cartService
+              .getCartItemsChangeStatus()
+              .pipe(take(1))
+              .subscribe((status: boolean) => {
+                this.cartService.setCartItemsChangeStatus(!status);
+              });
+          },
+          error: (err: AppError) => {
+            this.msgModalService.setModal('error', err.error.message);
+          },
+        });
+      } else {
+        this.cartService.setProductInCart(productId, 0, cartId).subscribe({
+          next: (response: { message: string }) => {
+            this.msgModalService.setModal('success', response.message);
+
+            this.cartService
+              .getCartItemsChangeStatus()
+              .pipe(take(1))
+              .subscribe((status: boolean) => {
+                this.cartService.setCartItemsChangeStatus(!status);
+              });
+          },
+          error: (err: AppError) => {
+            this.msgModalService.setModal('error', err.error.message);
+          },
+        });
+      }
+    } else {
+      this.cartService.setProductInCart(productId, this.userId).subscribe({
+        next: (response: { message: string }) => {
+          this.msgModalService.setModal('success', response.message);
+
+          this.cartService
+            .getCartItemsChangeStatus()
+            .pipe(take(1))
+            .subscribe((status: boolean) => {
+              this.cartService.setCartItemsChangeStatus(!status);
+            });
+        },
+        error: (err: AppError) => {
+          this.msgModalService.setModal('error', err.error.message);
+        },
+      });
     }
   }
 

@@ -200,7 +200,15 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cartService.setProductInCart(productId).subscribe({
           next: (response: { message: string; cartId: number }) => {
             this.localStorageService.setCartId(response.cartId);
+
             this.msgModalService.setModal('success', response.message);
+
+            this.cartService
+              .getCartItemsChangeStatus()
+              .pipe(take(1))
+              .subscribe((status: boolean) => {
+                this.cartService.setCartItemsChangeStatus(!status);
+              });
           },
           error: (err: AppError) => {
             this.msgModalService.setModal('error', err.error.message);
@@ -210,6 +218,13 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cartService.setProductInCart(productId, 0, cartId).subscribe({
           next: (response: { message: string }) => {
             this.msgModalService.setModal('success', response.message);
+
+            this.cartService
+              .getCartItemsChangeStatus()
+              .pipe(take(1))
+              .subscribe((status: boolean) => {
+                this.cartService.setCartItemsChangeStatus(!status);
+              });
           },
           error: (err: AppError) => {
             this.msgModalService.setModal('error', err.error.message);
@@ -220,6 +235,13 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cartService.setProductInCart(productId, this.userId).subscribe({
         next: (response: { message: string }) => {
           this.msgModalService.setModal('success', response.message);
+
+          this.cartService
+            .getCartItemsChangeStatus()
+            .pipe(take(1))
+            .subscribe((status: boolean) => {
+              this.cartService.setCartItemsChangeStatus(!status);
+            });
         },
         error: (err: AppError) => {
           this.msgModalService.setModal('error', err.error.message);

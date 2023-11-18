@@ -186,6 +186,119 @@ async function deleteCart(req, res) {
   }
 }
 
+async function getCartItems(req, res) {
+  try {
+    const { userId, cartId } = req.params;
+
+    let cartItems = 0;
+
+    const pool = await createPool();
+
+    if (!+cartId && +userId) {
+      // If user is logged we send cartId only from localstorage
+      // when the user is not logged on
+      const result = await pool.request().input("userId", sql.Int(), userId)
+        .query(`
+        SELECT
+          ci.amount,
+          ci.item_price,
+          c.cart_price,
+          cs.cart_status,
+          p.product_name,
+          p.avg_rating,
+          p.count_reviews,
+          p.id_product,
+          pi.src,
+          pr.product_price,
+          dp.discount_price,
+          dp.discount_value,
+          dp.saved
+        FROM cart_items ci
+        INNER JOIN carts c ON ci.id_cart = c.id_cart
+        INNER JOIN cart_status cs ON cs.id_cart_status = c.id_cart_status
+        INNER JOIN products p ON p.id_product = ci.id_product
+        INNER JOIN product_images pi ON p.id_product = pi.id_product
+        LEFT JOIN (
+            SELECT 
+                id_product, 
+                product_price
+            FROM prices
+            WHERE price_date_till IS NULL
+            AND price_date_from <= '${currDate}'
+        ) pr ON p.id_product = pr.id_product
+        OUTER APPLY (
+            SELECT TOP 1
+                dp.discount_price, 
+                dp.discount_value, 
+                dp.saved
+            FROM discount_prices dp
+            INNER JOIN prices pr2 ON dp.id_price = pr2.id_price
+            INNER JOIN discount_durations dd ON dp.id_discount_duration = dd.id_discount_duration
+            WHERE pr2.id_product = p.id_product
+            AND dd.discount_date_from <= '${currDate}'
+            AND dd.discount_date_till > '${currDate}'
+            ORDER BY dd.discount_date_from DESC
+        ) dp
+        WHERE id_user = @userId AND c.id_cart_status != 1;
+      `);
+
+      cartItems = result.recordset;
+    } else if (+cartId && !+userId) {
+      // If user is not logged we sent cartId from localstorage
+      const result = await pool.request().input("cartId", sql.Int(), cartId)
+        .query(`
+        SELECT
+          ci.amount,
+          ci.item_price,
+          c.cart_price,
+          cs.cart_status,
+          p.product_name,
+          p.avg_rating,
+          p.count_reviews,
+          p.id_product,
+          pi.src,
+          pr.product_price,
+          dp.discount_price,
+          dp.discount_value,
+          dp.saved
+        FROM cart_items ci
+        INNER JOIN carts c ON ci.id_cart = c.id_cart
+        INNER JOIN cart_status cs ON cs.id_cart_status = c.id_cart_status
+        INNER JOIN products p ON p.id_product = ci.id_product
+        INNER JOIN product_images pi ON p.id_product = pi.id_product
+        LEFT JOIN (
+            SELECT 
+                id_product, 
+                product_price
+            FROM prices
+            WHERE price_date_till IS NULL
+            AND price_date_from <= '${currDate}'
+        ) pr ON p.id_product = pr.id_product
+        OUTER APPLY (
+            SELECT TOP 1
+                dp.discount_price, 
+                dp.discount_value, 
+                dp.saved
+            FROM discount_prices dp
+            INNER JOIN prices pr2 ON dp.id_price = pr2.id_price
+            INNER JOIN discount_durations dd ON dp.id_discount_duration = dd.id_discount_duration
+            WHERE pr2.id_product = p.id_product
+            AND dd.discount_date_from <= '${currDate}'
+            AND dd.discount_date_till > '${currDate}'
+            ORDER BY dd.discount_date_from DESC
+        ) dp
+        WHERE c.id_cart = @cartId;
+      `);
+
+      cartItems = result.recordset;
+    }
+
+    res.status(200).json(cartItems);
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
 // =============================
 
 function errorHandler(err, res) {
@@ -213,4 +326,5 @@ function getCurrentDate() {
 module.exports = {
   setProductInCart,
   deleteCart,
+  getCartItems,
 };
