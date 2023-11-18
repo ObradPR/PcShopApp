@@ -29,7 +29,7 @@ export class CategoryProductsComponent implements OnInit {
         };
       });
 
-      console.log(products);
+      // console.log(products);
 
       this.shopService.setProductsInit(products);
     });

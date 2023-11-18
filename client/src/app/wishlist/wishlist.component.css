@@ -61,9 +61,9 @@ hr {
   height: 14rem;
   align-items: center;
   cursor: pointer;
-  -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: var(--box-shadow);
+  -moz-box-shadow: var(--box-shadow);
+  box-shadow: var(--box-shadow);
 }
 
 .wishlist-item-block:hover {

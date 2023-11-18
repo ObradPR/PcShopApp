@@ -33,6 +33,7 @@
   --red: #e94444;
   --red-transparent: #e94444c5;
   --dark-red: #c53c3c;
+  --box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
 }
 
 a {

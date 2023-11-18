@@ -74,6 +74,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.localStorageService.setAccessToken(data.token);
           this.authService.setUserFromLocalStorage();
 
+          this.localStorageService.removeCartId();
+
           this.msgModalService.setModal('success', data.message);
           this.loginForm.reset();
           this.onClosingModal();

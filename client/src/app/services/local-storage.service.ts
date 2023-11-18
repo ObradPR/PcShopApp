@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 
+// SERVICES
+import { CartService } from './cart.service';
+
+// INTERFACES
+
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
   private accessTokenName: string = 'access_token';
+  private cartTokenName: string = 'cart_id';
 
+  constructor(private cartService: CartService) {}
+
+  // USER ACCOUNT LOGIN/REGISTER
   setAccessToken(token: string) {
     localStorage.setItem(this.accessTokenName, token);
   }
@@ -14,7 +23,24 @@ export class LocalStorageService {
     return localStorage.getItem(this.accessTokenName);
   }
 
-  removeAccessToken(): void {
+  removeAccessToken() {
     localStorage.removeItem(this.accessTokenName);
+  }
+
+  // CART
+  setCartId(cartId: number) {
+    localStorage.setItem(this.cartTokenName, cartId.toString());
+  }
+
+  getCartId(): number {
+    return parseInt(localStorage.getItem(this.cartTokenName));
+  }
+
+  removeCartId() {
+    const cartId = this.getCartId();
+
+    this.cartService.deleteCart(cartId).subscribe();
+
+    localStorage.removeItem(this.cartTokenName);
   }
 }

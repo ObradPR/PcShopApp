@@ -15,7 +15,9 @@ import { UserData } from 'src/app/interfaces/user-data.interface';
 
 // SERVICES
 import { AuthService } from 'src/app/services/auth.service';
+import { CartService } from 'src/app/services/cart.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ShopService } from 'src/app/services/shop.service';
@@ -41,7 +43,9 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
     private wishlistService: WishlistService,
     private msgModalService: MessageModalService,
     private productService: ProductService,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private localStorageService: LocalStorageService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -185,6 +189,42 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
             })
         );
       }
+    }
+  }
+
+  addProductToCart(productId: number) {
+    if (this.userId === 0) {
+      const cartId = this.localStorageService.getCartId();
+
+      if (!cartId) {
+        this.cartService.setProductInCart(productId).subscribe({
+          next: (response: { message: string; cartId: number }) => {
+            this.localStorageService.setCartId(response.cartId);
+            this.msgModalService.setModal('success', response.message);
+          },
+          error: (err: AppError) => {
+            this.msgModalService.setModal('error', err.error.message);
+          },
+        });
+      } else {
+        this.cartService.setProductInCart(productId, 0, cartId).subscribe({
+          next: (response: { message: string }) => {
+            this.msgModalService.setModal('success', response.message);
+          },
+          error: (err: AppError) => {
+            this.msgModalService.setModal('error', err.error.message);
+          },
+        });
+      }
+    } else {
+      this.cartService.setProductInCart(productId, this.userId).subscribe({
+        next: (response: { message: string }) => {
+          this.msgModalService.setModal('success', response.message);
+        },
+        error: (err: AppError) => {
+          this.msgModalService.setModal('error', err.error.message);
+        },
+      });
     }
   }
 

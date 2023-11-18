@@ -40,7 +40,7 @@
                 <p class="current-price">€{{ product.product_price }}</p>
               </ng-template>
             </div>
-            <div class="product-to-cart">
+            <div class="product-to-cart" (click)="addProductToCart(product.id_product)">
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
           </div>
