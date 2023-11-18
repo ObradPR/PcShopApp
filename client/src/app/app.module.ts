@@ -28,6 +28,7 @@ import { FooterBottomComponent } from './footer/footer-bottom/footer-bottom.comp
 import { FooterCopyComponent } from './footer/footer-copy/footer-copy.component';
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import { ContactComponent } from './contact/contact.component';
+import { CartComponent } from './cart/cart.component';
 
 export function jwtOptionsFactory() {
   return {};
@@ -45,6 +46,7 @@ export function jwtOptionsFactory() {
     FooterCopyComponent,
     ScrollToTopComponent,
     ContactComponent,
+    CartComponent,
   ],
   imports: [
     BrowserModule,

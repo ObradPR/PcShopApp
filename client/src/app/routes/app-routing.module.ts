@@ -8,7 +8,9 @@ import { AuthGuard } from '../guards/auth.guard';
 import { WishlistItemsResolver } from '../resolvers/wishlist-items.resolver';
 import { ShopCategoriesResolver } from '../resolvers/shop-categories.resolver';
 import { CategoryProductsResolver } from '../resolvers/category-products.resolver';
+import { CartItemsResolver } from '../resolvers/cart-items.resolver';
 
+// COMPONENTS
 import { HomeComponent } from '../home/home.component';
 import { AboutUsComponent } from '../our-company/about-us/about-us.component';
 import { WeRentComponent } from '../our-company/we-rent/we-rent.component';
@@ -23,6 +25,7 @@ import { WishlistComponent } from '../wishlist/wishlist.component';
 import { ShopCategoriesComponent } from '../shop/shop-categories/shop-categories.component';
 import { ShopComponent } from '../shop/shop.component';
 import { CategoryProductsComponent } from '../shop/category-products/category-products.component';
+import { CartComponent } from '../cart/cart.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -57,6 +60,11 @@ const appRoutes: Routes = [
         resolve: { categoryProducts: CategoryProductsResolver },
       },
     ],
+  },
+  {
+    path: 'cart',
+    component: CartComponent,
+    resolve: { cartItems: CartItemsResolver },
   },
 ];
 
