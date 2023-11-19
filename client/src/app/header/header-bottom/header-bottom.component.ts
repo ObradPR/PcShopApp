@@ -94,7 +94,10 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
       this.cartService
         .getCartItemsChangeStatus()
         .subscribe((status: boolean) => {
-          const cartId = this.localStorageService.getCartId();
+          let cartId = this.localStorageService.getCartId();
+
+          if (isNaN(cartId)) cartId = 0;
+
           this.cartService
             .getCartItems(this.userId, cartId)
             .subscribe((items: any[]) => {
@@ -125,6 +128,7 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
       'We are sad to see you go 😟. If you had a bad experience you can share with us through contact form.'
     );
     this.setWishlistHeartInfo(false, 0);
+    this.setCartItemsInfo(0);
   }
 
   onToggleNavigation() {

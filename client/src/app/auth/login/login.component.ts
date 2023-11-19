@@ -8,6 +8,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { MessageModalService } from 'src/app/services/message-modal.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
+import { CartService } from 'src/app/services/cart.service';
 
 // INTERFACES
 import { AppError } from 'src/app/interfaces/app-error.interface';
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private msgModalService: MessageModalService,
     private localStorageService: LocalStorageService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +64,13 @@ export class LoginComponent implements OnInit, OnDestroy {
             .pipe(take(1))
             .subscribe((status: boolean) => {
               this.wishlistService.setWishlistItemsChangeStatus(!status);
+            });
+
+          this.cartService
+            .getCartItemsChangeStatus()
+            .pipe(take(1))
+            .subscribe((status: boolean) => {
+              this.cartService.setCartItemsChangeStatus(!status);
             });
 
           this.loadingService.setPageLoading(false);

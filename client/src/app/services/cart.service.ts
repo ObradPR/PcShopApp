@@ -40,4 +40,15 @@ export class CartService {
   deleteCart(cartId: number) {
     return this.dataService.delete(`cart/delete-cart/${cartId}`);
   }
+
+  deleteCartItem(itemId: number) {
+    return this.dataService.delete(`cart/delete-cart-item/${itemId}`);
+  }
+
+  changeItemAmount(howMuch: number, itemId: number) {
+    return this.dataService.patch('cart/update-item-amount', {
+      howMuch,
+      itemId,
+    });
+  }
 }

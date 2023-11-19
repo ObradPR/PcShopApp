@@ -190,7 +190,7 @@ async function getCartItems(req, res) {
   try {
     const { userId, cartId } = req.params;
 
-    let cartItems = 0;
+    let cartItems = [];
 
     const pool = await createPool();
 
@@ -200,6 +200,7 @@ async function getCartItems(req, res) {
       const result = await pool.request().input("userId", sql.Int(), userId)
         .query(`
         SELECT
+          ci.id_item,
           ci.amount,
           ci.item_price,
           c.cart_price,
@@ -291,9 +292,59 @@ async function getCartItems(req, res) {
       `);
 
       cartItems = result.recordset;
+      console.log(cartItems);
     }
 
     res.status(200).json(cartItems);
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
+async function deleteCartItem(req, res) {
+  try {
+    const { itemId } = req.params;
+
+    const pool = await createPool();
+
+    await pool.request().input("itemId", sql.Int(), itemId).query(`
+        DELETE FROM cart_items
+        WHERE id_item = @itemId;
+    `);
+
+    res.status(200).json({ message: "Successfully removed item!" });
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
+async function updateItemAmount(req, res) {
+  try {
+    const { howMuch, itemId } = req.body;
+
+    const pool = await createPool();
+
+    const result = await pool.request().input("itemId", sql.Int(), itemId)
+      .query(`
+          SELECT amount
+          FROM cart_items
+          WHERE id_item = @itemId;
+        `);
+
+    const amount = result.recordset[0].amount;
+
+    const newAmount = amount + +howMuch;
+
+    await pool
+      .request()
+      .input("amount", sql.Int(), newAmount)
+      .input("itemId", sql.Int(), itemId).query(`
+      UPDATE cart_items
+      SET amount = @amount
+      WHERE id_item = @itemId;
+    `);
+
+    res.status(200).json({ message: "Successfully changed item amount!" });
   } catch (err) {
     internalServerError(err, res);
   }
@@ -327,4 +378,6 @@ module.exports = {
   setProductInCart,
   deleteCart,
   getCartItems,
+  deleteCartItem,
+  updateItemAmount,
 };

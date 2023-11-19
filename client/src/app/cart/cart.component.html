@@ -33,14 +33,14 @@
         <div class="cart-item-action">
           <div
             class="p-container"
-            (click)="onChangeItemAmount('decrement', item.id_product)"
+            (click)="onChangeItemAmount('decrement', item.id_item, item.amount)"
           >
             <p>-</p>
           </div>
           <p>{{ item.amount }}</p>
           <div
             class="p-container"
-            (click)="onChangeItemAmount('increment', item.id_product)"
+            (click)="onChangeItemAmount('increment', item.id_item)"
           >
             <p>+</p>
           </div>
@@ -48,7 +48,7 @@
         <!-- <div class="heart-left-top">
           <i class="fa-solid fa-heart"></i>
         </div> -->
-        <div class="delete-right-top" (click)="onRemoveItem(item.id_product)">
+        <div class="delete-right-top" (click)="onRemoveItem(item.id_item)">
           <i class="fa-solid fa-circle-xmark"></i>
         </div>
       </div>

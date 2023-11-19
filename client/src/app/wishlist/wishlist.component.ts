@@ -36,6 +36,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       this.route.data.subscribe(
         (data: { wishlistProducts: WishlistItem[] }) => {
           this.products = data.wishlistProducts;
+          this.loadingService.setPageLoading(false);
         }
       ),
       this.route.params.subscribe((params: Params) => {

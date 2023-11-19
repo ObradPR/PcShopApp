@@ -37,7 +37,9 @@ export class LocalStorageService {
   }
 
   removeCartId() {
-    const cartId = this.getCartId();
+    let cartId = this.getCartId();
+
+    if (isNaN(cartId)) return;
 
     this.cartService.deleteCart(cartId).subscribe();
 
