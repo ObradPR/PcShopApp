@@ -45,15 +45,11 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.data.subscribe(
         (data: { cartInfo: { cartItems: []; cartStats } }) => {
-          this.items = data.cartInfo.cartItems;
-
-          this.totalPrice = data.cartInfo.cartStats.cart_price;
-          this.cartStatus = data.cartInfo.cartStats.cart_status;
-
-          this.totalSaved = this.items.reduce((sum: number, item: any) => {
-            if (item.saved !== null) return sum + item.saved * item.amount;
-            else return sum;
-          }, 0);
+          this.refreshCartPage(
+            data.cartInfo.cartItems,
+            data.cartInfo.cartStats.cart_price,
+            data.cartInfo.cartStats.cart_status
+          );
 
           this.loadingService.setPageLoading(false);
         }
@@ -80,15 +76,11 @@ export class CartComponent implements OnInit, OnDestroy {
           this.cartService
             .getCartItems(this.userId, this.cartId)
             .subscribe((data: { cartItems: any; cartStats: any }) => {
-              this.items = data.cartItems;
-
-              this.totalPrice = data.cartStats.cart_price;
-              this.cartStatus = data.cartStats.cart_status;
-
-              this.totalSaved = this.items.reduce((sum: number, item: any) => {
-                if (item.saved !== null) return sum + item.saved * item.amount;
-                else return sum;
-              }, 0);
+              this.refreshCartPage(
+                data.cartItems,
+                data.cartStats.cart_price,
+                data.cartStats.cart_status
+              );
             });
 
           this.msgModalService.setModal('success', response.message);
@@ -118,18 +110,10 @@ export class CartComponent implements OnInit, OnDestroy {
             this.cartService
               .getCartItems(this.userId, this.cartId)
               .subscribe((data: { cartItems: any; cartStats: any }) => {
-                this.items = data.cartItems;
-
-                this.totalPrice = data.cartStats.cart_price;
-                this.cartStatus = data.cartStats.cart_status;
-
-                this.totalSaved = this.items.reduce(
-                  (sum: number, item: any) => {
-                    if (item.saved !== null)
-                      return sum + item.saved * item.amount;
-                    else return sum;
-                  },
-                  0
+                this.refreshCartPage(
+                  data.cartItems,
+                  data.cartStats.cart_price,
+                  data.cartStats.cart_status
                 );
               });
 
@@ -142,6 +126,18 @@ export class CartComponent implements OnInit, OnDestroy {
           },
         })
     );
+  }
+
+  refreshCartPage(items: [], cartPrice: number, cartStatus: string) {
+    this.items = items;
+
+    this.totalPrice = cartPrice;
+    this.cartStatus = cartStatus;
+
+    this.totalSaved = this.items.reduce((sum: number, item: any) => {
+      if (item.saved !== null) return sum + item.saved * item.amount;
+      else return sum;
+    }, 0);
   }
 
   ngOnDestroy(): void {
