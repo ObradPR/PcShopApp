@@ -7,19 +7,20 @@ hr {
 }
 
 #cart-items-holder {
-  max-height: 85vh;
+  max-height: 70vh;
   overflow: auto;
+  width: 70%;
 }
 
 .cart-item-block-holder {
   position: relative;
-  width: 90%;
   margin: 1rem auto 2rem;
   display: flex;
+  justify-content: space-around;
 }
 
 .cart-item-action {
-  width: 10%;
+  width: 15%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -47,7 +48,7 @@ hr {
 .delete-right-top {
   position: absolute;
   top: -0.6rem;
-  right: 6.6rem;
+  right: 10rem;
 }
 
 .delete-right-top i {
@@ -63,7 +64,7 @@ hr {
 .cart-item-block {
   display: flex;
   justify-content: space-between;
-  width: 90%;
+  width: 80%;
   background-color: var(--grey);
   border-radius: 5px;
   padding: 1rem 2rem;
@@ -111,4 +112,45 @@ hr {
 .product--block-price {
   width: 15%;
   text-align: end;
+}
+
+#cart-stats {
+  width: 30%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 3rem;
+  flex-direction: column;
+  height: 20vh;
+  padding: 0 3rem;
+}
+
+.order-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+#cart-stats p,
+#cart-stats b {
+  font-size: 1.2rem;
+}
+
+#cart-holder {
+  display: flex;
+  width: 100%;
+}
+
+#order-header .hr-mb-1 {
+  margin-bottom: 1rem;
+}
+
+#order-fun {
+  display: flex;
+  justify-content: end;
+}
+
+#order-fun a {
+  border-radius: var(--button-radius);
+  margin-top: 2rem;
 }

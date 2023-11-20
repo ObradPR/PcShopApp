@@ -24,6 +24,9 @@ export class CartComponent implements OnInit, OnDestroy {
   cartItemsErrorMessage: string = '';
   userId: number = 0;
   cartId: number = 0;
+  totalPrice: number = 0;
+  cartStatus: string = '';
+  totalSaved: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,10 +43,21 @@ export class CartComponent implements OnInit, OnDestroy {
     this.getClientStatus();
 
     this.subscriptions.push(
-      this.route.data.subscribe((data: { cartItems: [] }) => {
-        this.items = data.cartItems;
-        this.loadingService.setPageLoading(false);
-      })
+      this.route.data.subscribe(
+        (data: { cartInfo: { cartItems: []; cartStats } }) => {
+          this.items = data.cartInfo.cartItems;
+
+          this.totalPrice = data.cartInfo.cartStats.cart_price;
+          this.cartStatus = data.cartInfo.cartStats.cart_status;
+
+          this.totalSaved = this.items.reduce((sum: number, item: any) => {
+            if (item.saved !== null) return sum + item.saved * item.amount;
+            else return sum;
+          }, 0);
+
+          this.loadingService.setPageLoading(false);
+        }
+      )
     );
   }
 
@@ -65,8 +79,16 @@ export class CartComponent implements OnInit, OnDestroy {
         next: (response: { message: string }) => {
           this.cartService
             .getCartItems(this.userId, this.cartId)
-            .subscribe((cartItems: any) => {
-              this.items = cartItems;
+            .subscribe((data: { cartItems: any; cartStats: any }) => {
+              this.items = data.cartItems;
+
+              this.totalPrice = data.cartStats.cart_price;
+              this.cartStatus = data.cartStats.cart_status;
+
+              this.totalSaved = this.items.reduce((sum: number, item: any) => {
+                if (item.saved !== null) return sum + item.saved * item.amount;
+                else return sum;
+              }, 0);
             });
 
           this.msgModalService.setModal('success', response.message);
@@ -86,7 +108,6 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   onChangeItemAmount(how: string, itemId: number, itemAmount?: number) {
-    console.log(itemAmount);
     if (itemAmount === 1) return;
 
     this.subscriptions.push(
@@ -96,8 +117,20 @@ export class CartComponent implements OnInit, OnDestroy {
           next: () => {
             this.cartService
               .getCartItems(this.userId, this.cartId)
-              .subscribe((cartItems: any) => {
-                this.items = cartItems;
+              .subscribe((data: { cartItems: any; cartStats: any }) => {
+                this.items = data.cartItems;
+
+                this.totalPrice = data.cartStats.cart_price;
+                this.cartStatus = data.cartStats.cart_status;
+
+                this.totalSaved = this.items.reduce(
+                  (sum: number, item: any) => {
+                    if (item.saved !== null)
+                      return sum + item.saved * item.amount;
+                    else return sum;
+                  },
+                  0
+                );
               });
 
             this.cartService

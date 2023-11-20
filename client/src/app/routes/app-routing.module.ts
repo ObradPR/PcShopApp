@@ -64,7 +64,7 @@ const appRoutes: Routes = [
   {
     path: 'cart',
     component: CartComponent,
-    resolve: { cartItems: CartItemsResolver },
+    resolve: { cartInfo: CartItemsResolver },
   },
 ];
 

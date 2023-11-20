@@ -191,6 +191,7 @@ async function getCartItems(req, res) {
     const { userId, cartId } = req.params;
 
     let cartItems = [];
+    let cartStats;
 
     const pool = await createPool();
 
@@ -203,8 +204,6 @@ async function getCartItems(req, res) {
           ci.id_item,
           ci.amount,
           ci.item_price,
-          c.cart_price,
-          cs.cart_status,
           p.product_name,
           p.avg_rating,
           p.count_reviews,
@@ -240,19 +239,28 @@ async function getCartItems(req, res) {
             AND dd.discount_date_till > '${currDate}'
             ORDER BY dd.discount_date_from DESC
         ) dp
-        WHERE id_user = @userId AND c.id_cart_status != 1;
+        WHERE id_user = @userId AND c.id_cart_status != 1 AND c.id_cart_status != 2;
       `);
 
       cartItems = result.recordset;
+
+      const result2 = await pool.request().input("userId", sql.Int(), userId)
+        .query(`
+          SELECT c.cart_price, cs.cart_status
+          FROM carts c
+          INNER JOIN cart_status cs ON c.id_cart_status = cs.id_cart_status
+          WHERE c.id_user = @userId AND c.id_cart_status != 1 AND c.id_cart_status != 2;
+      `);
+
+      cartStats = result2.recordset[0];
     } else if (+cartId && !+userId) {
       // If user is not logged we sent cartId from localstorage
       const result = await pool.request().input("cartId", sql.Int(), cartId)
         .query(`
         SELECT
+          ci.id_item,
           ci.amount,
           ci.item_price,
-          c.cart_price,
-          cs.cart_status,
           p.product_name,
           p.avg_rating,
           p.count_reviews,
@@ -288,14 +296,23 @@ async function getCartItems(req, res) {
             AND dd.discount_date_till > '${currDate}'
             ORDER BY dd.discount_date_from DESC
         ) dp
-        WHERE c.id_cart = @cartId;
+        WHERE c.id_cart = @cartId AND c.id_cart_status != 1 AND c.id_cart_status != 2;
       `);
 
       cartItems = result.recordset;
-      console.log(cartItems);
+
+      const result2 = await pool.request().input("cartId", sql.Int(), cartId)
+        .query(`
+          SELECT c.cart_price, cs.cart_status
+          FROM carts c
+          INNER JOIN cart_status cs ON c.id_cart_status = cs.id_cart_status
+          WHERE c.id_cart = @cartId AND c.id_cart_status != 1 AND c.id_cart_status != 2;
+      `);
+
+      cartStats = result2.recordset[0];
     }
 
-    res.status(200).json(cartItems);
+    res.status(200).json({ cartItems, cartStats });
   } catch (err) {
     internalServerError(err, res);
   }

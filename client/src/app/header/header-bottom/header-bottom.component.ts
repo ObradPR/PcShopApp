@@ -100,11 +100,11 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
 
           this.cartService
             .getCartItems(this.userId, cartId)
-            .subscribe((items: any[]) => {
-              if (items.length > 0) {
-                this.setCartItemsInfo(items.length);
+            .subscribe((data: { cartItems: any; cartStats: any }) => {
+              if (data.cartItems.length > 0) {
+                this.setCartItemsInfo(data.cartItems.length);
               } else {
-                this.setCartItemsInfo(items.length);
+                this.setCartItemsInfo(data.cartItems.length);
               }
             });
         })

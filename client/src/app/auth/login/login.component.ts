@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription, finalize, take } from 'rxjs';
+import { Router } from '@angular/router';
 
 // SERVICES
 import { AuthService } from 'src/app/services/auth.service';
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private msgModalService: MessageModalService,
     private localStorageService: LocalStorageService,
     private wishlistService: WishlistService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.cartService.setCartItemsChangeStatus(!status);
             });
 
+          this.router.navigateByUrl('/');
           this.loadingService.setPageLoading(false);
         })
       )
