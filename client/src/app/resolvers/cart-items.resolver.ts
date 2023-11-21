@@ -9,6 +9,8 @@ import { CartService } from '../services/cart.service';
 
 // INTERFACES
 import { UserData } from '../interfaces/user-data.interface';
+import { CartItem } from '../interfaces/cart-item.interface';
+import { CartStats } from '../interfaces/cart-stats.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +24,9 @@ export class CartItemsResolver {
     private cartService: CartService
   ) {}
 
-  resolve: ResolveFn<any> = (
+  resolve: ResolveFn<{ cartItems: CartItem[]; cartStats: CartStats }> = (
     route: ActivatedRouteSnapshot
-  ): Observable<any> => {
+  ): Observable<{ cartItems: CartItem[]; cartStats: CartStats }> => {
     return this.authService.getUserData().pipe(
       switchMap((userData: UserData) => {
         if (userData !== null) {

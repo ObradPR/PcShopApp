@@ -4,6 +4,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 // SERVICES
 import { DataService } from './data.service';
 
+// INTERFACES
+import { CartItem } from '../interfaces/cart-item.interface';
+import { CartStats } from '../interfaces/cart-stats.interface';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +25,10 @@ export class CartService {
     return this.cartItemsChangedStatus.asObservable();
   }
 
-  getCartItems(userId: number, cartId: number): Observable<any> {
+  getCartItems(
+    userId: number,
+    cartId: number
+  ): Observable<{ cartItems: CartItem[]; cartStats: CartStats }> {
     return this.dataService.get(`cart/cart-items/${userId}/${cartId}`);
   }
 

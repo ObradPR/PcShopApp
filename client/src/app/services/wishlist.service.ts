@@ -28,13 +28,16 @@ export class WishlistService {
     return this.dataService.get(`wishlist/wishlist-items/${userId}`);
   }
 
-  removeItem(productId: number, userId: number): Observable<any> {
+  removeItem(productId: number, userId: number) {
     return this.dataService.delete(
       `wishlist/remove-item-wishlist/${userId}/${productId}`
     );
   }
 
-  addToWishlist(obj: { productId: number; userId: number }): Observable<any> {
+  addToWishlist(obj: {
+    productId: number;
+    userId: number;
+  }): Observable<{ message: string }> {
     return this.dataService.post('wishlist/add-item-wishlist', obj);
   }
 }

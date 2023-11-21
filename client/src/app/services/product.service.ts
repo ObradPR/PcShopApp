@@ -6,6 +6,8 @@ import { DataService } from './data.service';
 
 // INTERFACES
 import { FeaturedProduct } from '../interfaces/featured-product.interface';
+import { SearchProduct } from '../interfaces/search-product.interface';
+import { Product } from '../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +19,17 @@ export class ProductService {
     return this.dataService.get(`featured-products/${userId}`);
   }
 
-  getCategoryProducts(categoryIds: number[], userId: number): Observable<any> {
+  getCategoryProducts(
+    categoryIds: number[],
+    userId: number
+  ): Observable<Product[]> {
     return this.dataService.post(`shop/get-category-products`, {
       categories: categoryIds,
       userId,
     });
   }
 
-  getProductsBySearch(title: string): Observable<any> {
+  getProductsBySearch(title: string): Observable<SearchProduct[]> {
     return this.dataService.get(`products-by-search/${title}`);
   }
 }

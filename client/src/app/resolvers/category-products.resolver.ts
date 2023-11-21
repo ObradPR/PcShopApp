@@ -8,6 +8,7 @@ import { AuthService } from '../services/auth.service';
 
 // INTERFACES
 import { UserData } from '../interfaces/user-data.interface';
+import { Product } from '../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,9 @@ export class CategoryProductsResolver {
     private authService: AuthService
   ) {}
 
-  resolve: ResolveFn<any> = (
+  resolve: ResolveFn<Product[]> = (
     route: ActivatedRouteSnapshot
-  ): Observable<any> => {
+  ): Observable<Product[]> => {
     return this.authService.getUserData().pipe(
       switchMap((userData: UserData) => {
         if (userData === null) {
@@ -31,7 +32,10 @@ export class CategoryProductsResolver {
           this.userId = userData.idUser;
         }
         const categoryId = +route.params.categoryId;
-        return this.productService.getCategoryProducts([categoryId], this.userId);
+        return this.productService.getCategoryProducts(
+          [categoryId],
+          this.userId
+        );
       })
     );
   };

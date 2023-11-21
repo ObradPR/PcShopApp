@@ -51,7 +51,6 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.shopService.getProducts().subscribe((data: Product[]) => {
-      console.log(data);
       this.products = data;
       if (this.products.length === 0) {
         this.categoryId = 0;
