@@ -12,6 +12,8 @@ import { LocalStorageService } from '../services/local-storage.service';
 // INTERFACES
 import { AppError } from '../interfaces/app-error.interface';
 import { UserData } from '../interfaces/user-data.interface';
+import { CartItem } from '../interfaces/cart-item.interface';
+import { CartStats } from '../interfaces/cart-stats.interface';
 
 @Component({
   selector: 'app-cart',
@@ -20,7 +22,7 @@ import { UserData } from '../interfaces/user-data.interface';
 })
 export class CartComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
-  items: [] = [];
+  items: CartItem[] = [];
   cartItemsErrorMessage: string = '';
   userId: number = 0;
   cartId: number = 0;
@@ -44,11 +46,12 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.route.data.subscribe(
-        (data: { cartInfo: { cartItems: []; cartStats } }) => {
+        (data: {
+          cartInfo: { cartItems: CartItem[]; cartStats: CartStats };
+        }) => {
           this.refreshCartPage(
             data.cartInfo.cartItems,
-            data.cartInfo.cartStats.cart_price,
-            data.cartInfo.cartStats.cart_status
+            data.cartInfo.cartStats
           );
 
           this.loadingService.setPageLoading(false);
@@ -75,13 +78,11 @@ export class CartComponent implements OnInit, OnDestroy {
         next: (response: { message: string }) => {
           this.cartService
             .getCartItems(this.userId, this.cartId)
-            .subscribe((data: { cartItems: any; cartStats: any }) => {
-              this.refreshCartPage(
-                data.cartItems,
-                data.cartStats.cart_price,
-                data.cartStats.cart_status
-              );
-            });
+            .subscribe(
+              (data: { cartItems: CartItem[]; cartStats: CartStats }) => {
+                this.refreshCartPage(data.cartItems, data.cartStats);
+              }
+            );
 
           this.msgModalService.setModal('success', response.message);
 
@@ -109,13 +110,11 @@ export class CartComponent implements OnInit, OnDestroy {
           next: () => {
             this.cartService
               .getCartItems(this.userId, this.cartId)
-              .subscribe((data: { cartItems: any; cartStats: any }) => {
-                this.refreshCartPage(
-                  data.cartItems,
-                  data.cartStats.cart_price,
-                  data.cartStats.cart_status
-                );
-              });
+              .subscribe(
+                (data: { cartItems: CartItem[]; cartStats: CartStats }) => {
+                  this.refreshCartPage(data.cartItems, data.cartStats);
+                }
+              );
 
             this.cartService
               .getCartItemsChangeStatus()
@@ -128,13 +127,13 @@ export class CartComponent implements OnInit, OnDestroy {
     );
   }
 
-  refreshCartPage(items: [], cartPrice: number, cartStatus: string) {
+  refreshCartPage(items: CartItem[], cartStats: CartStats) {
     this.items = items;
 
-    this.totalPrice = cartPrice;
-    this.cartStatus = cartStatus;
+    this.totalPrice = cartStats.cart_price;
+    this.cartStatus = cartStats.cart_status;
 
-    this.totalSaved = this.items.reduce((sum: number, item: any) => {
+    this.totalSaved = this.items.reduce((sum: number, item: CartItem) => {
       if (item.saved !== null) return sum + item.saved * item.amount;
       else return sum;
     }, 0);

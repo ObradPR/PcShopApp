@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+// INTERFACES
+import { Product } from 'src/app/interfaces/product.interface';
+
 // SERVICES
 import { ShopService } from 'src/app/services/shop.service';
 
@@ -16,10 +19,10 @@ export class CategoryProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: { categoryProducts: any }) => {
+    this.route.data.subscribe((data: { categoryProducts: Product[] }) => {
       let products = data.categoryProducts;
 
-      products = products.map((product: any) => {
+      products = products.map((product: Product) => {
         return {
           ...product,
           tag_names:

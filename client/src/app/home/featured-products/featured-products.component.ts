@@ -34,7 +34,7 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
   currSliderProducts: number;
   countSliderProducts: number;
   maxSliderProducts: number = 0;
-  slidePositionX: any;
+  slidePositionX: number;
   translateX: number[] = [];
   subscriptions: Subscription[] = [];
   isLogged: boolean = false;
@@ -232,6 +232,7 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
     const transformValue = computedStyles.getPropertyValue('transform');
 
     const matrixMatch = transformValue.match(/matrix.*\((.+)\)/);
+
     if (matrixMatch) {
       const matrix = matrixMatch[1].split(', ');
 

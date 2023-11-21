@@ -11,6 +11,7 @@ import { Subscription, finalize, take } from 'rxjs';
 
 // INTERFACES
 import { AppError } from 'src/app/interfaces/app-error.interface';
+import { Product } from 'src/app/interfaces/product.interface';
 import { UserData } from 'src/app/interfaces/user-data.interface';
 
 // SERVICES
@@ -29,7 +30,7 @@ import { WishlistService } from 'src/app/services/wishlist.service';
   styleUrls: ['./shop-products.component.css'],
 })
 export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() products: any = [];
+  @Input() products: Product[] = [];
   isLogged: boolean = false;
   userId: number = 0;
   subscriptions: Subscription[] = [];
@@ -49,7 +50,8 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.shopService.getProducts().subscribe((data: any) => {
+    this.shopService.getProducts().subscribe((data: Product[]) => {
+      console.log(data);
       this.products = data;
       if (this.products.length === 0) {
         this.categoryId = 0;
@@ -139,7 +141,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
               next: (response: { message: string }) => {
                 this.productService
                   .getCategoryProducts([this.categoryId], this.userId)
-                  .subscribe((products: any) => {
+                  .subscribe((products: Product[]) => {
                     this.products = products;
                   });
 
@@ -170,7 +172,7 @@ export class ShopProductsComponent implements OnInit, AfterViewInit, OnDestroy {
               next: (response: { message: string }) => {
                 this.productService
                   .getCategoryProducts([this.categoryId], this.userId)
-                  .subscribe((products: any) => {
+                  .subscribe((products: Product[]) => {
                     this.products = products;
                   });
 

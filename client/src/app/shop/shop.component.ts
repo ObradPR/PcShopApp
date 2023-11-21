@@ -13,5 +13,8 @@ export class ShopComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingService.setPageLoadingInit();
+    this.loadingService.getPageLoading().subscribe((data) => {
+      if (data) this.loadingService.setPageLoading(false);
+    });
   }
 }

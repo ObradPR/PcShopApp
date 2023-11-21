@@ -17,7 +17,7 @@ import { ShopService } from 'src/app/services/shop.service';
 import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 
 type SubscriptionData =
-  | { products: boolean; subCategories: any[] }
+  | { products: boolean; subCategories: Category[] }
   | { products: boolean };
 
 @Component({

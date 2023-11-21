@@ -19,6 +19,9 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 // INTERFACES
 import { UserData } from 'src/app/interfaces/user-data.interface';
 import { WishlistItem } from 'src/app/interfaces/wishlist-item.interface';
+import { SearchProduct } from 'src/app/interfaces/search-product.interface';
+import { CartItem } from 'src/app/interfaces/cart-item.interface';
+import { CartStats } from 'src/app/interfaces/cart-stats.interface';
 
 @Component({
   selector: 'app-header-bottom',
@@ -35,7 +38,7 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
   wishlistItemsCount: number = 0;
   navMenu: HTMLElement;
   searchProductsText: string = '';
-  searchProducts: any = [];
+  searchProducts: SearchProduct[] = [];
   searchProductsBlock: HTMLElement;
   cartItemsCount: number = 0;
 
@@ -100,13 +103,15 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
 
           this.cartService
             .getCartItems(this.userId, cartId)
-            .subscribe((data: { cartItems: any; cartStats: any }) => {
-              if (data.cartItems.length > 0) {
-                this.setCartItemsInfo(data.cartItems.length);
-              } else {
-                this.setCartItemsInfo(data.cartItems.length);
+            .subscribe(
+              (data: { cartItems: CartItem[]; cartStats: CartStats }) => {
+                if (data.cartItems.length > 0) {
+                  this.setCartItemsInfo(data.cartItems.length);
+                } else {
+                  this.setCartItemsInfo(data.cartItems.length);
+                }
               }
-            });
+            );
         })
     );
   }
@@ -162,7 +167,8 @@ export class HeaderBottomComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.productService
         .getProductsBySearch(this.searchProductsText)
-        .subscribe((data: any) => {
+        .subscribe((data: SearchProduct[]) => {
+          console.log(data);
           if (data.length === 0) {
             this.searchProductsBlock.style.maxHeight = 0 + 'vh';
           } else {

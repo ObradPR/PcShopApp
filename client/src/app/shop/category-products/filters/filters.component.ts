@@ -3,19 +3,18 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, filter, finalize } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 
 // INTERFACES
 import { Category } from 'src/app/interfaces/category.interface';
+import { Product } from 'src/app/interfaces/product.interface';
 import { UserData } from 'src/app/interfaces/user-data.interface';
 import { AuthService } from 'src/app/services/auth.service';
 
 // SERVICES
-import { LoadingService } from 'src/app/services/loading.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ShopService } from 'src/app/services/shop.service';
 
@@ -25,12 +24,12 @@ import { ShopService } from 'src/app/services/shop.service';
   styleUrls: ['./filters.component.css'],
 })
 export class FiltersComponent implements OnInit, OnDestroy {
-  @ViewChild('leftInput') minPriceInput: any;
-  @ViewChild('rightInput') maxPriceInput: any;
+  @ViewChild('leftInput') minPriceInput: ElementRef;
+  @ViewChild('rightInput') maxPriceInput: ElementRef;
   activeCategory: number = 0;
   categories: Category[] = [];
-  products: any[] = [];
-  productsInit: any[] | null = null;
+  products: Product[] = [];
+  productsInit: Product[] | null = null;
   baseMinPrice: number | null = null;
   baseMaxPrice: number | null = null;
   minPriceChanged: number = 0;
@@ -38,9 +37,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   brands: { id_brand: number; brand_name: string; brand_count: number }[] = [];
   tags: { tag_name: string; product_count: number }[] = [];
-  selectedBrands: [] | any = [];
-  selectedTags: [] | any = [];
-  selectedCategories: [] | any = [];
+  selectedBrands: string[] = [];
+  selectedTags: string[] = [];
+  selectedCategories: number[] = [];
   userId: number = 0;
 
   constructor(
@@ -115,14 +114,17 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   getProducts(): void {
-    this.shopService.getProducts().subscribe((data: any) => {
-      if (this.productsInit === null) {
-        this.productsInit = data;
-      }
-      this.products = data;
-    });
+    this.shopService
+      .getProducts()
+      .pipe(take(1))
+      .subscribe((data: Product[]) => {
+        if (this.productsInit === null) {
+          this.productsInit = data;
+        }
+        this.products = data;
+      });
 
-    this.shopService.getProductsInit().subscribe((data: any) => {
+    this.shopService.getProductsInit().subscribe((data: Product[]) => {
       this.productsInit = data;
     });
   }
@@ -218,9 +220,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
     );
   }
 
-  onPriceRangeChange(event: any): void {
+  onPriceRangeChange(event: Event): void {
     const eventTarget = event.target;
-    if (eventTarget.classList.contains('mat-slider__right-input')) {
+    if (
+      (eventTarget as HTMLElement).classList.contains('mat-slider__right-input')
+    ) {
       this.maxPriceChanged = +this.maxPriceInput.nativeElement.ariaValueText;
     } else {
       this.minPriceChanged = +this.minPriceInput.nativeElement.ariaValueText;
@@ -238,8 +242,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.getAllActiveBrands();
   }
 
-  checkTheProductPrice(productsArr: any[]): any {
-    return productsArr.filter((product: any) => {
+  checkTheProductPrice(productsArr: Product[]): Product[] {
+    return productsArr.filter((product: Product) => {
       if (
         product.discount_price &&
         product.discount_price >= this.minPriceChanged &&
@@ -264,16 +268,17 @@ export class FiltersComponent implements OnInit, OnDestroy {
       '.tb-categories:checked'
     );
 
-    categories.forEach((el: any) => {
+    categories.forEach((el: HTMLInputElement) => {
       this.selectedCategories.push(+el.value);
     });
+
     if (this.selectedCategories.length === 0) return;
     this.productService
       .getCategoryProducts(this.selectedCategories, this.userId)
-      .subscribe((products: any) => {
+      .subscribe((products: Product[]) => {
         let productsArr = products;
 
-        productsArr = productsArr.map((product: any) => {
+        productsArr = productsArr.map((product: Product) => {
           return {
             ...product,
             tag_names:
@@ -295,7 +300,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkTheSelectedFilters(productsArr: any[]): any {
+  checkTheSelectedFilters(productsArr: Product[]): Product[] {
     // CHECKING CATEGORIES FILTERS
 
     // CHECKING BRAND FILTERS
@@ -304,11 +309,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
     const brands =
       this.elementRef.nativeElement.querySelectorAll('.tb-brands:checked');
 
-    brands.forEach((el: any) => {
-      this.selectedBrands.push(el.nextElementSibling.innerText);
+    brands.forEach((el: HTMLElement) => {
+      this.selectedBrands.push(
+        (el.nextElementSibling as HTMLElement).innerText
+      );
     });
 
-    productsArr = this.productsInit.filter((product: any) => {
+    productsArr = this.productsInit.filter((product: Product) => {
       return this.selectedBrands.includes(product.brand_name);
     });
 
@@ -318,12 +325,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
     const tags =
       this.elementRef.nativeElement.querySelectorAll('.tb-tags:checked');
 
-    tags.forEach((el: any) => {
-      this.selectedTags.push(el.nextElementSibling.innerText);
+    tags.forEach((el: HTMLElement) => {
+      this.selectedTags.push((el.nextElementSibling as HTMLElement).innerText);
     });
 
-    productsArr = productsArr.filter((product: any) => {
-      return product.tag_names.some((el) => this.selectedTags.includes(el));
+    productsArr = productsArr.filter((product: Product | any) => {
+      return product.tag_names.some((el: string) => {
+        return this.selectedTags.includes(el);
+      });
     });
 
     return productsArr;

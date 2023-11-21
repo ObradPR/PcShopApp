@@ -6,6 +6,7 @@ import { DataService } from './data.service';
 
 // INTERFACES
 import { Category } from '../interfaces/category.interface';
+import { Product } from '../interfaces/product.interface';
 
 // TYPES
 type ShopCategoryData =
@@ -16,22 +17,26 @@ type ShopCategoryData =
   providedIn: 'root',
 })
 export class ShopService {
-  private products: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  private productsInit: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private products: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>(
+    null
+  );
+  private productsInit: BehaviorSubject<Product[]> = new BehaviorSubject<
+    Product[]
+  >(null);
 
-  getProducts(): Observable<any> {
+  getProducts(): Observable<Product[]> {
     return this.products.asObservable();
   }
 
-  setProducts(products: any) {
+  setProducts(products: Product[]) {
     this.products.next(products);
   }
 
-  getProductsInit(): Observable<any> {
+  getProductsInit(): Observable<Product[]> {
     return this.productsInit.asObservable();
   }
 
-  setProductsInit(products: any) {
+  setProductsInit(products: Product[]) {
     this.productsInit.next(products);
     this.products.next(products);
   }
