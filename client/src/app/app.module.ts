@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { OurCompanyModule } from './our-company/our-company.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { ShopModule } from './shop/shop.module';
+import { UserModule } from './user/user.module';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
@@ -67,7 +68,8 @@ export function jwtOptionsFactory() {
     OurCompanyModule,
     WishlistModule,
     ShopModule,
-    FormsModule
+    FormsModule,
+    UserModule,
   ],
   providers: [JwtHelperService],
   bootstrap: [AppComponent],

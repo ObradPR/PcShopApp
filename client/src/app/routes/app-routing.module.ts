@@ -26,6 +26,7 @@ import { ShopCategoriesComponent } from '../shop/shop-categories/shop-categories
 import { ShopComponent } from '../shop/shop.component';
 import { CategoryProductsComponent } from '../shop/category-products/category-products.component';
 import { CartComponent } from '../cart/cart.component';
+import { UserComponent } from '../user/user.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -66,6 +67,7 @@ const appRoutes: Routes = [
     component: CartComponent,
     resolve: { cartInfo: CartItemsResolver },
   },
+  { path: 'user', component: UserComponent },
 ];
 
 @NgModule({

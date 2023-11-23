@@ -1,0 +1,39 @@
+h2 {
+  text-align: center;
+}
+
+hr.style-1 {
+  margin-bottom: 2rem;
+}
+
+#user-holder {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#user-left {
+  width: 35%;
+}
+
+#user-right {
+  width: 45%;
+}
+
+i.fa-solid.fa-user {
+  font-size: 10rem;
+}
+
+#user-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--black);
+  border-radius: var(--block-radius);
+  padding: 2rem;
+}
+
+#user-icon h3 {
+  margin-top: 2rem;
+}

@@ -43,19 +43,19 @@
         </ng-template>
       </a>
       <ng-container *ngIf="isLogged">
-        <div class="count-circle">
+        <div class="count-circle" *ngIf="wishlistItemsCount > 0">
           <p>{{ wishlistItemsCount }}</p>
         </div>
       </ng-container>
     </div>
     <div class="header-user-icon">
       <a routerLink="/cart"><i class="fa-solid fa-cart-shopping"></i></a>
-      <div class="count-circle">
+      <div class="count-circle" *ngIf="cartItemsCount > 0">
         <p>{{ cartItemsCount }}</p>
       </div>
     </div>
     <div class="header-user-icon">
-      <a href="#"><i class="fa-solid fa-user"></i></a>
+      <a routerLink="/user"><i class="fa-solid fa-user"></i></a>
       <ng-container *ngIf="isLogged">
         <div class="count-circle"><p>0</p></div>
       </ng-container>
