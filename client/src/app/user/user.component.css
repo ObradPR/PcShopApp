@@ -12,8 +12,28 @@ hr.style-1 {
   justify-content: space-evenly;
 }
 
+#user-right,
+#user-left {
+  border-radius: var(--block-radius);
+  padding: 2rem;
+  background-color: var(--grey);
+}
+
 #user-left {
   width: 35%;
+}
+
+#user-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#user-left:hover,
+#user-right:hover {
+  box-shadow: var(--box-shadow);
+  -webkit-box-shadow: var(--box-shadow);
+  -moz-box-shadow: var(--box-shadow);
 }
 
 #user-right {
@@ -29,11 +49,84 @@ i.fa-solid.fa-user {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--black);
-  border-radius: var(--block-radius);
-  padding: 2rem;
 }
 
 #user-icon h3 {
   margin-top: 2rem;
+}
+
+#user-stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+  row-gap: 1rem;
+  margin-top: 2rem;
+}
+
+.user-info-block {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  position: relative;
+}
+
+.user-info-block::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  width: 0;
+  bottom: -6px;
+  background-color: var(--light-orange);
+  height: 4px;
+  transition-property: width;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+}
+
+.user-info-block:hover::after,
+.user-info-block:focus::after {
+  left: 0;
+  right: auto;
+  width: 100%;
+}
+
+#user-information-holder {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 4rem;
+  row-gap: 2rem;
+}
+
+.user-info-email-block {
+  margin: 2rem 0;
+}
+
+.user-info-email-block p {
+  width: 30%;
+}
+
+.user-info-email-block b {
+  width: auto;
+  text-align: end;
+}
+
+.gear-icon-holder {
+  margin-bottom: 2rem;
+  text-align: end;
+}
+
+.gear-icon-holder i {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.gear-icon-holder i:hover {
+  color: var(--light-orange);
+}
+
+.info-text p {
+  font-size: 1.1rem;
 }

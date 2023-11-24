@@ -5,10 +5,124 @@
     <div id="user-left">
       <div id="user-icon">
         <i class="fa-solid fa-user"></i>
-        <h3>Username</h3>
+        <h3>{{ userData.firstName + " " + userData.lastName }}</h3>
       </div>
-      <div id="user-stats"></div>
+      <div id="user-stats">
+        <div class="user-info-block">
+          <p>Money spent:</p>
+          <b>100000$</b>
+        </div>
+        <div class="user-info-block">
+          <p>Products bought:</p>
+          <b>8</b>
+        </div>
+        <div class="user-info-block">
+          <p>Order count:</p>
+          <b>3</b>
+        </div>
+        <div class="user-info-block">
+          <p>Last order:</p>
+          <b>24.jun 2023</b>
+        </div>
+      </div>
     </div>
-    <div id="user-right"></div>
+    <div id="user-right">
+      <div class="gear-icon-holder">
+        <i class="fa-solid fa-gear" (click)="onEditUser()"></i>
+      </div>
+      <div>
+        <div id="user-information-holder">
+          <div class="user-info-block">
+            <p>First name:</p>
+            <b>{{ userData.firstName }}</b>
+          </div>
+          <div class="user-info-block">
+            <p>Last name:</p>
+            <b>{{ userData.lastName }}</b>
+          </div>
+          <div class="user-info-block">
+            <p>Phone:</p>
+            <b>{{ userData.phone }}</b>
+          </div>
+          <div class="user-info-block">
+            <p>Password:</p>
+            <b>********</b>
+          </div>
+        </div>
+        <div class="user-info-block user-info-email-block">
+          <p>Email:</p>
+          <b>{{ userData.email }}</b>
+        </div>
+      </div>
+      <div class="info-text">
+        <p>
+          Here you can see your registered information. To edit them, click on
+          the gear icon at the top right.
+        </p>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- TODO: -->
+<ng-container *ngIf="editModalVisible">
+  <div class="modal-wrapper">
+    <div class="modal" [@scaleAnimation]>
+      <div class="form-holder">
+        <h2>Edit your information</h2>
+        <hr class="style-1" />
+        <div class="close-mark-modal-form" (click)="onClosingModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+        <form
+          id="login-form"
+          [formGroup]="editForm"
+          (ngSubmit)="onEditSubmit()"
+        >
+          <div class="form-block">
+            <input type="email" id="email-tb" formControlName="email" />
+            <label for="email-tb" [class.active]="isLabelActive['email-tb']"
+              ><span style="color: var(--red)">*</span>Email:</label
+            >
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('email').valid && editForm.get('email').touched
+              "
+              >Invalid email.</span
+            >
+          </div>
+          <div class="form-block">
+            <input
+              type="password"
+              id="password-tb"
+              formControlName="password"
+            />
+            <label
+              for="password-tb"
+              [class.active]="isLabelActive['password-tb']"
+              ><span style="color: var(--red)">*</span>Password:</label
+            >
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('password').valid &&
+                editForm.get('password').touched
+              "
+              >Ivalid password.</span
+            >
+          </div>
+          <div class="form-block login-submit-block">
+            <input
+              type="submit"
+              id="edit-submit-btn"
+              value="Edit"
+              [disabled]="!editForm.valid || editForm.untouched"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="backdrop"></div>
+</ng-container>
