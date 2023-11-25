@@ -130,3 +130,45 @@ i.fa-solid.fa-user {
 .info-text p {
   font-size: 1.1rem;
 }
+
+.modal-wrapper {
+  width: 50%;
+}
+
+.modal {
+  padding: 3rem 2rem;
+  border-radius: var(--block-radius-min);
+}
+
+#edit-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  column-gap: 2rem;
+  row-gap: 2rem;
+}
+
+input[type="password"],
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+  width: 100%;
+  border-radius: 0%;
+  border: 1px solid grey;
+  padding: 0.5rem 1.2rem;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
+.edit-submit-block {
+  width: 100%;
+  text-align: end;
+}
+
+.newsletter-block {
+  width: 150%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

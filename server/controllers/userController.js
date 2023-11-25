@@ -159,6 +159,15 @@ async function loginUser(req, res) {
       throw new ValueExistsInDatabaseError("Invalid email or password", 401);
     }
 
+    // Get newsletter status
+    const newseltterResult = await pool
+      .request()
+      .input("email", sql.NVarChar(), email).query(`
+      SELECT subscriber_status FROM newsletter_subscribers WHERE subscriber_email = @email;
+    `);
+
+    const newsletterStatus = newseltterResult.recordset[0];
+
     // Insert login data in logins table
     const insertLogin = await pool
       .request()
@@ -176,6 +185,7 @@ async function loginUser(req, res) {
       phone: user.user_phone,
       registerDate: user.register_date,
       idRole: user.id_role,
+      newsletter: newsletterStatus.subscriber_status,
     };
     const secretKey = process.env.JWT_SECRET;
     const token = jwt.sign(jwtPayload, secretKey, {
@@ -198,6 +208,79 @@ async function loginUser(req, res) {
   }
 }
 
+async function editUser(req, res) {
+  try {
+    const userObj = req.body;
+    console.log(userObj);
+    const pool = await createPool();
+
+    if (!userObj.password) {
+      await pool
+        .request()
+        .input("idUser", sql.Int(), userObj.id_user)
+        .input("fName", sql.NVarChar(), userObj.firstName)
+        .input("lName", sql.NVarChar(), userObj.lastName)
+        .input("phone", sql.VarChar(), userObj.phone)
+        .input("email", sql.NVarChar(), userObj.email).query(`
+        UPDATE users
+        SET
+          first_name = @fName,
+          last_name = @lName,
+          user_phone = @phone,
+          user_email = @email
+        WHERE id_user = @idUser;
+      `);
+
+      const newsletterSubscription = userObj.newsletter ? 1 : 0;
+      await pool
+        .request()
+        .input("email", sql.NVarChar(), userObj.email)
+        .input("status", sql.Bit(), newsletterSubscription).query(`
+        UPDATE newsletter_subscribers
+        SET subscriber_status = @status
+        WHERE subscriber_email = @email;
+      `);
+
+      const userResult = await pool
+        .request()
+        .input("userId", sql.Int(), userObj.id_user).query(`
+        SELECT * FROM users WHERE id_user = @userId;
+      `);
+
+      const newUser = userResult.recordset[0];
+
+      // Get newsletter status
+      const newseltterResult = await pool
+        .request()
+        .input("email", sql.NVarChar(), userObj.email).query(`
+          SELECT subscriber_status FROM newsletter_subscribers WHERE subscriber_email = @email;
+        `);
+
+      const newsletterStatus = newseltterResult.recordset[0];
+
+      // Craete a JSON Web Token (JWT) with the user's ID as the payload
+      const jwtPayload = {
+        idUser: newUser.id_user,
+        firstName: newUser.first_name,
+        lastName: newUser.last_name,
+        email: newUser.user_email,
+        phone: newUser.user_phone,
+        registerDate: newUser.register_date,
+        idRole: newUser.id_role,
+        newsletter: newsletterStatus.subscriber_status,
+      };
+      const secretKey = process.env.JWT_SECRET;
+      const token = jwt.sign(jwtPayload, secretKey, {
+        expiresIn: "30d",
+      });
+      res.status(201).json({ message: "Successfully changed user.", token });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 function errorHandler(err, res) {
   console.log(`Error: ${err}`);
   res.status(err.status).json({ message: err.message });
@@ -206,4 +289,5 @@ function errorHandler(err, res) {
 module.exports = {
   registerUser,
   loginUser,
+  editUser,
 };

@@ -74,16 +74,41 @@
         <div class="close-mark-modal-form" (click)="onClosingModal()">
           <i class="fa-solid fa-xmark"></i>
         </div>
-        <form
-          id="login-form"
-          [formGroup]="editForm"
-          (ngSubmit)="onEditSubmit()"
-        >
+        <form id="edit-form" [formGroup]="editForm" (ngSubmit)="onEditSubmit()">
           <div class="form-block">
-            <input type="email" id="email-tb" formControlName="email" />
-            <label for="email-tb" [class.active]="isLabelActive['email-tb']"
-              ><span style="color: var(--red)">*</span>Email:</label
+            <input type="text" id="fn-tb-edit" formControlName="firstName" />
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('firstName').valid &&
+                editForm.get('firstName').touched
+              "
+              >Invalid first name.</span
             >
+          </div>
+          <div class="form-block">
+            <input type="text" id="ln-tb-edit" formControlName="lastName" />
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('lastName').valid &&
+                editForm.get('lastName').touched
+              "
+              >Invalid last name.</span
+            >
+          </div>
+          <div class="form-block">
+            <input type="tel" id="phone-tb-edit" formControlName="phone" />
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('phone').valid && editForm.get('phone').touched
+              "
+              >Must be in format ###-###-####.</span
+            >
+          </div>
+          <div class="form-block">
+            <input type="email" id="email-tb-edit" formControlName="email" />
             <span
               class="invalid-input"
               *ngIf="
@@ -95,24 +120,54 @@
           <div class="form-block">
             <input
               type="password"
-              id="password-tb"
+              id="pass-tb-edit"
               formControlName="password"
+              placeholder="Password"
             />
-            <label
-              for="password-tb"
-              [class.active]="isLabelActive['password-tb']"
-              ><span style="color: var(--red)">*</span>Password:</label
-            >
             <span
               class="invalid-input"
               *ngIf="
                 !editForm.get('password').valid &&
                 editForm.get('password').touched
               "
-              >Ivalid password.</span
+              >Password must have one uppercase, one lowercase letter, one
+              digit, one special character and minimum 8 characters.</span
             >
           </div>
-          <div class="form-block login-submit-block">
+          <div class="form-block">
+            <input
+              type="password"
+              id="re-pass-tb-edit"
+              formControlName="retypePassword"
+              placeholder="Retype password"
+            />
+            <span
+              class="invalid-input"
+              *ngIf="
+                !editForm.get('retypePassword').valid &&
+                editForm.get('retypePassword').touched
+              "
+              >Wrong password.</span
+            >
+          </div>
+
+          <div class="form-block newsletter-block">
+            <input
+              type="checkbox"
+              id="newsletter-cb2"
+              formControlName="newsletter"
+            />
+            <label for="newsletter-cb2" class="label-no-absolute">
+              Sign up for email notifications and receive news updates!
+            </label>
+            <span
+              class="invalid-input"
+              *ngIf="!editForm.valid && editForm.touched"
+              >Fill your form properly.</span
+            >
+          </div>
+
+          <div class="form-block edit-submit-block">
             <input
               type="submit"
               id="edit-submit-btn"
