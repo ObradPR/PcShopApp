@@ -1,5 +1,10 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 // SERVICES
@@ -14,6 +19,7 @@ import { UserData } from '../interfaces/user-data.interface';
 
 // ANIMATIONS
 import { scaleAnimation } from 'src/app/shared/animations';
+import { AppError } from '../interfaces/app-error.interface';
 
 @Component({
   selector: 'app-user',
@@ -91,20 +97,30 @@ export class UserComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.email,
       ]),
-      password: new FormControl(null, [
+      newPassword: new FormControl(null, [
         Validators.pattern(this.authService.getPasswordRegex()),
       ]),
-      retypePassword: new FormControl(null, [
-        this.retypePasswordCheck.bind(this),
+      newPasswordRetype: new FormControl(null, [
+        (control) => this.retypePasswordCheck(control, 'newPassword'),
+      ]),
+      oldPassword: new FormControl(null, [
+        Validators.pattern(this.authService.getPasswordRegex()),
+      ]),
+      oldPasswordRetype: new FormControl(null, [
+        (control) => this.retypePasswordCheck(control, 'oldPassword'),
       ]),
       newsletter: new FormControl(this.userData.newsletter),
     });
   }
 
-  retypePasswordCheck(control: FormControl): null | { [key: string]: boolean } {
-    const passControl = control.root.get('password');
+  retypePasswordCheck(
+    control: AbstractControl,
+    compareTo: string
+  ): null | { [key: string]: boolean } {
+    const passControl = control.root.get(compareTo);
     const passValue = passControl ? passControl.value : null;
     const retypePassValue = control.value;
+
     if (retypePassValue === passValue) {
       return null;
     } else {
@@ -129,7 +145,14 @@ export class UserComponent implements OnInit, OnDestroy {
       editFormValues.lastName === this.userData.lastName &&
       editFormValues.email === this.userData.email &&
       editFormValues.phone === this.userData.phone &&
-      editFormValues.newsletter === this.userData.newsletter
+      editFormValues.newsletter === this.userData.newsletter &&
+      (editFormValues.newPassword === '' ||
+        editFormValues.newPassword === null ||
+        editFormValues.newPasswordRetype !== editFormValues.newPassword ||
+        editFormValues.oldPassword === '' ||
+        editFormValues.oldPassword === null ||
+        editFormValues.oldPasswordRetype !== editFormValues.oldPassword ||
+        editFormValues.oldPassword === editFormValues.newPassword)
     ) {
       this.msgModalService.setModal(
         'error',
@@ -141,8 +164,6 @@ export class UserComponent implements OnInit, OnDestroy {
       this.subscriptions.push(
         this.userService.editUser(editFormValues).subscribe({
           next: (data: { message: string; token: string }) => {
-            console.log(data);
-
             this.localStorageService.removeAccessToken();
             this.localStorageService.setAccessToken(data.token);
             this.authService.setUserFromLocalStorage();
@@ -150,6 +171,9 @@ export class UserComponent implements OnInit, OnDestroy {
             this.msgModalService.setModal('success', data.message);
 
             this.onClosingModal();
+          },
+          error: (err: AppError) => {
+            this.msgModalService.setModal('error', err.error.message);
           },
         })
       );

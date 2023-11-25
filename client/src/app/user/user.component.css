@@ -132,7 +132,7 @@ i.fa-solid.fa-user {
 }
 
 .modal-wrapper {
-  width: 50%;
+  width: 60%;
 }
 
 .modal {
@@ -145,7 +145,7 @@ i.fa-solid.fa-user {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
   column-gap: 2rem;
-  row-gap: 2rem;
+  row-gap: 3rem;
 }
 
 input[type="password"],

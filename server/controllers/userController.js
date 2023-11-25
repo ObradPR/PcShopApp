@@ -9,6 +9,7 @@ const {
   ValidationError,
   MissingFiledsError,
   ValueExistsInDatabaseError,
+  ValueDoesntExistsInDatabaseError,
 } = require("../error");
 
 // REGEX FUNCTIONS
@@ -149,14 +150,20 @@ async function loginUser(req, res) {
     const user = userResult.recordset[0];
 
     if (!user) {
-      throw new ValueExistsInDatabaseError("Invalid email or password", 401);
+      throw new ValueDoesntExistsInDatabaseError(
+        "Invalid email or password",
+        401
+      );
     }
 
     // Compare the provided password with the hashed password from the DB
     const isPasswordValid = await bcrypt.compare(password, user.user_password);
 
     if (!isPasswordValid) {
-      throw new ValueExistsInDatabaseError("Invalid email or password", 401);
+      throw new ValueDoesntExistsInDatabaseError(
+        "Invalid email or password",
+        401
+      );
     }
 
     // Get newsletter status
@@ -199,7 +206,7 @@ async function loginUser(req, res) {
       errorHandler(err, res);
     } else if (err instanceof ValidationError) {
       errorHandler(err, res);
-    } else if (err instanceof ValueExistsInDatabaseError) {
+    } else if (err instanceof ValueDoesntExistsInDatabaseError) {
       errorHandler(err, res);
     } else {
       console.log(err);
@@ -211,71 +218,116 @@ async function loginUser(req, res) {
 async function editUser(req, res) {
   try {
     const userObj = req.body;
-    console.log(userObj);
+
+    // Regex
+    if (
+      !isValidName(userObj.firstName) ||
+      !isValidName(userObj.lastName) ||
+      !isValidPhone(userObj.phone) ||
+      !isValidRetypePassword(userObj.oldPassword, userObj.oldPasswordRetype) ||
+      !isValidRetypePassword(userObj.newPassword, userObj.newPasswordRetype)
+    ) {
+      throw new ValidationError("Invalid data format", 400);
+    }
+
     const pool = await createPool();
 
-    if (!userObj.password) {
-      await pool
-        .request()
-        .input("idUser", sql.Int(), userObj.id_user)
-        .input("fName", sql.NVarChar(), userObj.firstName)
-        .input("lName", sql.NVarChar(), userObj.lastName)
-        .input("phone", sql.VarChar(), userObj.phone)
-        .input("email", sql.NVarChar(), userObj.email).query(`
-        UPDATE users
-        SET
-          first_name = @fName,
-          last_name = @lName,
-          user_phone = @phone,
-          user_email = @email
-        WHERE id_user = @idUser;
-      `);
-
-      const newsletterSubscription = userObj.newsletter ? 1 : 0;
-      await pool
-        .request()
-        .input("email", sql.NVarChar(), userObj.email)
-        .input("status", sql.Bit(), newsletterSubscription).query(`
-        UPDATE newsletter_subscribers
-        SET subscriber_status = @status
-        WHERE subscriber_email = @email;
-      `);
-
-      const userResult = await pool
-        .request()
-        .input("userId", sql.Int(), userObj.id_user).query(`
-        SELECT * FROM users WHERE id_user = @userId;
-      `);
-
-      const newUser = userResult.recordset[0];
-
-      // Get newsletter status
-      const newseltterResult = await pool
-        .request()
-        .input("email", sql.NVarChar(), userObj.email).query(`
-          SELECT subscriber_status FROM newsletter_subscribers WHERE subscriber_email = @email;
+    // Check for password
+    const userResult = await pool
+      .request()
+      .input("userId", sql.Int(), userObj.id_user).query(`
+          SELECT * FROM users WHERE id_user = @userId;
         `);
 
-      const newsletterStatus = newseltterResult.recordset[0];
+    const user = userResult.recordset[0];
 
-      // Craete a JSON Web Token (JWT) with the user's ID as the payload
-      const jwtPayload = {
-        idUser: newUser.id_user,
-        firstName: newUser.first_name,
-        lastName: newUser.last_name,
-        email: newUser.user_email,
-        phone: newUser.user_phone,
-        registerDate: newUser.register_date,
-        idRole: newUser.id_role,
-        newsletter: newsletterStatus.subscriber_status,
-      };
-      const secretKey = process.env.JWT_SECRET;
-      const token = jwt.sign(jwtPayload, secretKey, {
-        expiresIn: "30d",
-      });
-      res.status(201).json({ message: "Successfully changed user.", token });
+    let hashedNewPassword = undefined;
+
+    if (user && userObj.oldPassword && userObj.newPassword) {
+      const isPasswordValid = await bcrypt.compare(
+        userObj.oldPassword,
+        user.user_password
+      );
+
+      if (!isPasswordValid) {
+        throw new ValueDoesntExistsInDatabaseError(
+          "Invalid email or password",
+          401
+        );
+      }
+
+      hashedNewPassword = await bcrypt.hash(userObj.newPassword, 10);
     }
+
+    // Update user
+    await pool
+      .request()
+      .input("idUser", sql.Int(), userObj.id_user)
+      .input("fName", sql.NVarChar(), userObj.firstName)
+      .input("lName", sql.NVarChar(), userObj.lastName)
+      .input("phone", sql.VarChar(), userObj.phone)
+      .input("email", sql.NVarChar(), userObj.email)
+      .input("pass", sql.NVarChar(), hashedNewPassword).query(`
+          UPDATE users
+          SET
+            first_name = @fName,
+            last_name = @lName,
+            user_phone = @phone,
+            user_email = @email
+            ${hashedNewPassword ? ", user_password = @pass" : ""}
+          WHERE id_user = @idUser;
+        `);
+
+    const newsletterSubscription = userObj.newsletter ? 1 : 0;
+    await pool
+      .request()
+      .input("email", sql.NVarChar(), userObj.email)
+      .input("status", sql.Bit(), newsletterSubscription).query(`
+          UPDATE newsletter_subscribers
+          SET subscriber_status = @status
+          WHERE subscriber_email = @email;
+        `);
+
+    const newUserResult = await pool
+      .request()
+      .input("userId", sql.Int(), userObj.id_user).query(`
+          SELECT * FROM users WHERE id_user = @userId;
+        `);
+
+    const newUser = newUserResult.recordset[0];
+
+    // Get newsletter status
+    const newseltterResult = await pool
+      .request()
+      .input("email", sql.NVarChar(), userObj.email).query(`
+        SELECT subscriber_status FROM newsletter_subscribers WHERE subscriber_email = @email;
+      `);
+
+    newsletterStatus = newseltterResult.recordset[0];
+
+    // Craete a JSON Web Token (JWT) with the user's ID as the payload
+    const jwtPayload = {
+      idUser: newUser.id_user,
+      firstName: newUser.first_name,
+      lastName: newUser.last_name,
+      email: newUser.user_email,
+      phone: newUser.user_phone,
+      registerDate: newUser.register_date,
+      idRole: newUser.id_role,
+      newsletter: newsletterStatus.subscriber_status,
+    };
+    const secretKey = process.env.JWT_SECRET;
+    const token = jwt.sign(jwtPayload, secretKey, {
+      expiresIn: "30d",
+    });
+    res.status(201).json({ message: "Successfully changed user.", token });
   } catch (err) {
+    if (
+      err instanceof ValueDoesntExistsInDatabaseError ||
+      err instanceof ValidationError
+    ) {
+      errorHandler(err, res);
+    }
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
