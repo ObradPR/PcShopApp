@@ -62,9 +62,27 @@
       </div>
     </div>
   </div>
+  <div id="user-messages" *ngIf="userMessages">
+    <h2>Your messages</h2>
+    <hr class="style-1" />
+    <div id="user-messages-holder">
+      <div class="user-message-block" *ngFor="let message of userMessages">
+        <div class="user-message-row">
+          <h3>{{ message.notification_title }}</h3>
+          <!-- <p class="expand-content">+</p> -->
+        </div>
+        <hr class="style-2" />
+        <div class="message-content toggle">
+          <p>{{ message.notification_content }}</p>
+        </div>
+        <p style="text-align: end; font-style: italic; opacity: 0.8">
+          {{ message.notification_date | date }}
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- TODO: -->
 <ng-container *ngIf="editModalVisible">
   <div class="modal-wrapper">
     <div class="modal" [@scaleAnimation]>

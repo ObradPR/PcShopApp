@@ -16,4 +16,8 @@ export class UserService {
   editUser(userObj: UserData): Observable<{ message: string; token: string }> {
     return this.dataService.patch('user/edit-user', userObj);
   }
+
+  getUserMessages(userId: number): Observable<any> {
+    return this.dataService.get(`user/get-messages/${userId}`);
+  }
 }

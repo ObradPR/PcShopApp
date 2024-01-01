@@ -333,6 +333,36 @@ async function editUser(req, res) {
   }
 }
 
+async function getUserMessages(req, res) {
+  try {
+    const { id } = req.params;
+
+    const pool = await createPool();
+
+    const messagesResult = await pool.request().input("userId", sql.Int(), id)
+      .query(`
+      SELECT
+        notification_title,
+        notification_content,
+        notification_date
+      FROM user_notifications
+      WHERE id_user = @userId AND notification_read = 0;
+    `);
+
+    const result = messagesResult.recordsets[0];
+
+    res
+      .status(200)
+      .json({
+        message: "User messages successfully got",
+        userMessages: result,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 function errorHandler(err, res) {
   console.log(`Error: ${err}`);
   res.status(err.status).json({ message: err.message });
@@ -342,4 +372,5 @@ module.exports = {
   registerUser,
   loginUser,
   editUser,
+  getUserMessages,
 };

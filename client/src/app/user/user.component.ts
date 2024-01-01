@@ -32,6 +32,7 @@ export class UserComponent implements OnInit, OnDestroy {
   editForm: FormGroup;
   subscriptions: Subscription[] = [];
   editModalVisible: boolean = false;
+  userMessages: any = null;
 
   constructor(
     private loadingService: LoadingService,
@@ -50,6 +51,8 @@ export class UserComponent implements OnInit, OnDestroy {
     this.getUserInformation();
 
     this.formInit();
+
+    this.getUserMessages();
   }
 
   pageLoaded() {
@@ -136,7 +139,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.editModalVisible = false;
   }
 
-  //TODO:
   onEditSubmit() {
     const editFormValues = this.editForm.value;
 
@@ -178,6 +180,36 @@ export class UserComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+
+  getUserMessages() {
+    if (!this.userData) return;
+
+    this.subscriptions.push(
+      this.userService.getUserMessages(this.userData.idUser).subscribe({
+        next: (response: any) => {
+          this.userMessages = response.userMessages;
+
+          this.userMessagesExpandFun();
+        },
+      })
+    );
+  }
+
+  userMessagesExpandFun() {
+    setTimeout(() => {
+      const messagesTitle =
+        this.elementRef.nativeElement.querySelectorAll(`.user-message-row`);
+      const messagesContent =
+        this.elementRef.nativeElement.querySelectorAll(`.message-content`);
+
+      messagesTitle.forEach((el: HTMLElement, i: number) => {
+        el.addEventListener('click', () => {
+          messagesContent[i].classList.toggle('toggle');
+          el.classList.toggle('active');
+        });
+      });
+    }, 500);
   }
 
   ngOnDestroy(): void {
