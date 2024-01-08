@@ -20,4 +20,8 @@ export class UserService {
   getUserMessages(userId: number): Observable<any> {
     return this.dataService.get(`user/get-messages/${userId}`);
   }
+
+  readMessage(messageId: number): Observable<{ message: string }> {
+    return this.dataService.patch('user/read-message', { messageId });
+  }
 }

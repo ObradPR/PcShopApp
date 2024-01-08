@@ -62,17 +62,19 @@
       </div>
     </div>
   </div>
-  <div id="user-messages" *ngIf="userMessages">
+  <div id="user-messages" *ngIf="userMessages.length > 0">
     <h2>Your messages</h2>
     <hr class="style-1" />
     <div id="user-messages-holder">
       <div class="user-message-block" *ngFor="let message of userMessages">
         <div class="user-message-row">
           <h3>{{ message.notification_title }}</h3>
-          <!-- <p class="expand-content">+</p> -->
         </div>
         <hr class="style-2" />
-        <div class="message-content toggle">
+        <div
+          class="message-content toggle"
+          (click)="onReadMessage(message.id_notification)"
+        >
           <p>{{ message.notification_content }}</p>
         </div>
         <p style="text-align: end; font-style: italic; opacity: 0.8">

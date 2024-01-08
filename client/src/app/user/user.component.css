@@ -208,9 +208,6 @@ input[type="email"] {
 }
 
 .user-message-block {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between; */
   margin-top: 1rem;
 }
 
@@ -219,16 +216,26 @@ input[type="email"] {
 }
 
 .message-content {
-  padding: 1rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   background-color: var(--grey);
   border-bottom: solid 1px var(--grey-2);
   border-right: solid 1px var(--grey-2);
   border-left: solid 1px var(--grey-2);
   border-radius: 0 0 var(--block-radius-min) var(--block-radius-min);
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }
 
 .message-content.toggle {
   height: 0;
   padding: 0;
   overflow: hidden;
+}
+
+.message-content::after {
+  font-family: FontAwesome;
+  content: "\f00c";
+  font-size: 1rem;
+  margin-right: 0.5rem;
 }

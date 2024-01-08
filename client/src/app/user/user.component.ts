@@ -32,7 +32,7 @@ export class UserComponent implements OnInit, OnDestroy {
   editForm: FormGroup;
   subscriptions: Subscription[] = [];
   editModalVisible: boolean = false;
-  userMessages: any = null;
+  userMessages: any = [];
 
   constructor(
     private loadingService: LoadingService,
@@ -189,6 +189,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.userService.getUserMessages(this.userData.idUser).subscribe({
         next: (response: any) => {
           this.userMessages = response.userMessages;
+          console.log(this.userMessages);
 
           this.userMessagesExpandFun();
         },
@@ -210,6 +211,20 @@ export class UserComponent implements OnInit, OnDestroy {
         });
       });
     }, 500);
+  }
+
+  onReadMessage(messageId: number) {
+    this.subscriptions.push(
+      this.userService.readMessage(messageId).subscribe({
+        next: (response) => {
+          // console.log(response.message);
+          this.getUserMessages();
+        },
+        error: (err: AppError) => {
+          this.msgModalService.setModal('error', err.error.message);
+        },
+      })
+    );
   }
 
   ngOnDestroy(): void {

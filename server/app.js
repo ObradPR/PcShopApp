@@ -28,6 +28,6 @@ app.use("/", homeRoute);
 app.use("/user", userRoute);
 app.use("/wishlist", wishlistRoute);
 app.use("/shop", shopRoute);
-app.use("/cart", cartRoute)
+app.use("/cart", cartRoute);
 
 module.exports = app;

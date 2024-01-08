@@ -342,6 +342,7 @@ async function getUserMessages(req, res) {
     const messagesResult = await pool.request().input("userId", sql.Int(), id)
       .query(`
       SELECT
+        id_notification,
         notification_title,
         notification_content,
         notification_date
@@ -351,12 +352,33 @@ async function getUserMessages(req, res) {
 
     const result = messagesResult.recordsets[0];
 
-    res
-      .status(200)
-      .json({
-        message: "User messages successfully got",
-        userMessages: result,
-      });
+    res.status(200).json({
+      message: "User messages successfully got",
+      userMessages: result,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function readMessage(req, res) {
+  try {
+    const { messageId } = req.body;
+
+    const pool = await createPool();
+
+    const messagesResult = await pool
+      .request()
+      .input("messageId", sql.Int(), messageId).query(`
+      UPDATE user_notifications
+      SET notification_read = 1
+      WHERE id_notification = @messageId;
+    `);
+
+    res.status(201).json({
+      message: "Successfully read",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
@@ -373,4 +395,5 @@ module.exports = {
   loginUser,
   editUser,
   getUserMessages,
+  readMessage,
 };
