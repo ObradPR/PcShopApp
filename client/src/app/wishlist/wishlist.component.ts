@@ -80,6 +80,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
     );
   }
 
+  consoleit() {
+    console.log('jajse');
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription: Subscription) =>
       subscription.unsubscribe()

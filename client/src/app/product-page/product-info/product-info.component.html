@@ -1,9 +1,12 @@
 <div class="product-name">
   <!-- <div
     class="add-to-wishlist"
-    (click)="addProductToWishlist(product.id_product, product.in_wishlist)"
+    
   > -->
-  <div class="add-to-wishlist">
+  <div
+    class="add-to-wishlist"
+    (click)="addProductToWishlist(product.id_product, product.in_wishlist)"
+  >
     <ng-container *ngIf="product.in_wishlist; else notIn">
       <i class="fa-solid fa-heart"></i>
     </ng-container>

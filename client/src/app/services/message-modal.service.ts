@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 
 // INTERFACES
 import { MessageModal } from '../interfaces/message-modal.interface';
@@ -11,16 +11,19 @@ export class MessageModalService {
   modalStatus: BehaviorSubject<boolean> = new BehaviorSubject(false);
   modalStyle: BehaviorSubject<string> = new BehaviorSubject(null);
   modalMessage: BehaviorSubject<string> = new BehaviorSubject('');
+  private timeoutId: any;
 
   getModalStatus(): Observable<boolean> {
     return this.modalStatus.asObservable();
   }
 
   setModalStatus(status: boolean) {
+    clearTimeout(this.timeoutId);
+
     this.modalStatus.next(status);
 
     // Auto closing if it's not clicked
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.modalStatus.next(false);
     }, 10000);
   }

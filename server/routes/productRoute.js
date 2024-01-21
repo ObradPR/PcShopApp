@@ -7,7 +7,7 @@ router
   .route("/single-product/:productName/:userId")
   .get(productController.getSingleProduct);
 router
-  .route("/specifications/:productId")
-  .get(productController.getSpecifications);
+  .route("/info/:productId")
+  .get(productController.getInfo);
 
 module.exports = router;

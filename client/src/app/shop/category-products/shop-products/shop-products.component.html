@@ -1,10 +1,6 @@
 <ng-container *ngIf="products.length > 0; else noProducts">
   <div id="shop-products-holder">
-    <div
-      class="shop-product--block"
-      *ngFor="let product of products"
-      routerLink="/product/{{ product.product_name }}"
-    >
+    <div class="shop-product--block" *ngFor="let product of products">
       <div class="shop-card--product">
         <!-- WISHLIST LOGIC -->
         <div
@@ -21,7 +17,10 @@
           </ng-template>
         </div>
         <!-- IMG -->
-        <div class="product--block-img">
+        <div
+          class="product--block-img"
+          routerLink="/product/{{ product.product_name }}"
+        >
           <!-- main img -->
           <img
             src="../../../assets/img/{{ product.src }}"

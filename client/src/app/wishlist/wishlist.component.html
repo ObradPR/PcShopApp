@@ -5,7 +5,7 @@
     <ng-container *ngIf="products.length > 0; else empty">
       <div class="wishlist-item-block-holder" *ngFor="let item of products">
         <div class="wishlist-item-block">
-          <div class="item-img">
+          <div class="item-img" routerLink="/product/{{ item.product_name }}">
             <img
               [src]="'../../../assets/img/' + item.src"
               [alt]="item.product_name"

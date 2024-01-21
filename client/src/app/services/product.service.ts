@@ -39,7 +39,7 @@ export class ProductService {
     );
   }
 
-  getProductSpecifications(productId: number): Observable<any> {
-    return this.dataService.get(`product/specifications/${productId}`);
+  getProductInfo(productId: number): Observable<any> {
+    return this.dataService.get(`product/info/${productId}`);
   }
 }

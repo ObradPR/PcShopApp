@@ -3,6 +3,10 @@
     src="../../../assets/img/{{ product.src }}"
     alt="{{ product.product_name }}"
   />
+  <div class="product-avg-rating" *ngIf="product.avg_rating > 0">
+    <p>{{ product.avg_rating }}</p>
+    <i class="fa-solid fa-star"></i>
+  </div>
 </div>
 <div class="specifications">
   <h2>Specifications</h2>
@@ -23,4 +27,25 @@
     photos and prices. However, we cannot guarantee that all information and
     photos of items on this site are completely correct
   </p>
+</div>
+<div class="reviews-ratings">
+  <div class="review-rating-block" *ngFor="let obj of reviewsRatings">
+    <div class="rating">
+      <p>{{ obj.rating }}</p>
+      <i class="fa-solid fa-star"></i>
+    </div>
+    <div class="review">
+      <div>
+        <p class="review-header-grey">Impression</p>
+      </div>
+      <p class="review-content">
+        {{ obj.comment }}
+      </p>
+    </div>
+    <div class="review-date">
+      <p class="review-header-grey">
+        {{ obj.first_name + " " + obj.last_name }}, {{ obj.review_date | date }}
+      </p>
+    </div>
+  </div>
 </div>

@@ -35,6 +35,7 @@ async function getSingleProduct(req, res) {
         dp.discount_price,
         dp.discount_value,
         dp.saved,
+        p.avg_rating,
         ${
           +userId
             ? `CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist`
@@ -80,6 +81,7 @@ async function getSingleProduct(req, res) {
         dp.discount_price,
         dp.discount_value,
         dp.saved,
+        p.avg_rating,
         ${userId ? `wp.id_product` : ""}
     `);
 
@@ -94,7 +96,7 @@ async function getSingleProduct(req, res) {
   }
 }
 
-async function getSpecifications(req, res) {
+async function getInfo(req, res) {
   try {
     const { productId } = req.params;
 
@@ -102,7 +104,7 @@ async function getSpecifications(req, res) {
 
     const pool = await createPool();
 
-    const result = await pool.request().input("productId", sql.Int(), productId)
+    const specs = await pool.request().input("productId", sql.Int(), productId)
       .query(`
       SELECT
         ps.product_spec_value,
@@ -113,11 +115,28 @@ async function getSpecifications(req, res) {
       WHERE ps.id_product = @productId;
     `);
 
-    const specifications = result.recordset;
+    const specifications = specs.recordset;
 
-    res
-      .status(200)
-      .json({ message: "Successfully got specification", specifications });
+    const revRat = await pool.request().input("productId", sql.Int(), productId)
+      .query(`
+      SELECT
+        r.comment,
+        r.review_date,
+        rt.rating,
+        u.first_name,
+        u.last_name
+      FROM users u
+      INNER JOIN reviews r ON u.id_user = r.id_user AND r.id_product = @productId
+      INNER JOIN ratings rt ON u.id_user = rt.id_user AND rt.id_product = @productId;
+    `);
+
+    const reviewsRatings = revRat.recordset;
+
+    res.status(200).json({
+      message: "Successfully got specification",
+      specifications,
+      reviewsRatings,
+    });
   } catch (err) {
     if (err instanceof MissingFiledsError) {
       errorHandler(err, res);
@@ -152,5 +171,5 @@ function getCurrentDate() {
 
 module.exports = {
   getSingleProduct,
-  getSpecifications,
+  getInfo,
 };

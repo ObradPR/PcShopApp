@@ -9,8 +9,6 @@
           *ngFor="let product of featuredProducts; let i = index"
           class="product--block"
           [style.transform]="getTranslateX(i)"
-          style="cursor: pointer"
-          routerLink="/product/{{ product.product_name }}"
         >
           <div class="featured-product">
             <div
@@ -27,7 +25,10 @@
               </ng-template>
             </div>
             <!-- img -->
-            <div class="product--block-img">
+            <div
+              class="product--block-img"
+              routerLink="/product/{{ product.product_name }}"
+            >
               <!-- main img -->
               <img
                 src="../../../assets/img/{{ product.src }}"

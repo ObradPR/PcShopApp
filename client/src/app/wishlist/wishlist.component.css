@@ -60,7 +60,7 @@ hr {
   padding: 1rem 2rem;
   height: 14rem;
   align-items: center;
-  cursor: pointer;
+
   -webkit-box-shadow: var(--box-shadow);
   -moz-box-shadow: var(--box-shadow);
   box-shadow: var(--box-shadow);
@@ -73,6 +73,7 @@ hr {
 .item-img {
   width: 30%;
   height: 10rem;
+  cursor: pointer;
 }
 
 .item-img img {
