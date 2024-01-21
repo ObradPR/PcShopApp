@@ -9,6 +9,8 @@
           *ngFor="let product of featuredProducts; let i = index"
           class="product--block"
           [style.transform]="getTranslateX(i)"
+          style="cursor: pointer"
+          routerLink="/product/{{ product.product_name }}"
         >
           <div class="featured-product">
             <div
@@ -49,7 +51,10 @@
                     <p class="current-price">€{{ product.product_price }}</p>
                   </ng-template>
                 </div>
-                <div class="product-to-cart" (click)="addProductToCart(product.id_product)">
+                <div
+                  class="product-to-cart"
+                  (click)="addProductToCart(product.id_product)"
+                >
                   <i class="fa-solid fa-cart-shopping"></i>
                 </div>
               </div>

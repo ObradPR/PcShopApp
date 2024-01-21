@@ -1,6 +1,10 @@
 <ng-container *ngIf="products.length > 0; else noProducts">
   <div id="shop-products-holder">
-    <div class="shop-product--block" *ngFor="let product of products">
+    <div
+      class="shop-product--block"
+      *ngFor="let product of products"
+      routerLink="/product/{{ product.product_name }}"
+    >
       <div class="shop-card--product">
         <!-- WISHLIST LOGIC -->
         <div
@@ -40,7 +44,10 @@
                 <p class="current-price">€{{ product.product_price }}</p>
               </ng-template>
             </div>
-            <div class="product-to-cart" (click)="addProductToCart(product.id_product)">
+            <div
+              class="product-to-cart"
+              (click)="addProductToCart(product.id_product)"
+            >
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
           </div>

@@ -1,0 +1,14 @@
+.product-top {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+}
+
+.product-details {
+  width: 60%;
+}
+
+.product-info {
+  width: 30%;
+}

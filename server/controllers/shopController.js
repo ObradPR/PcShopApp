@@ -223,7 +223,7 @@ async function getCategoryProducts(req, res) {
 
     res.status(200).json(products);
   } catch (err) {
-    if (err instanceof ValidationError || err instanceof MissingFiledsError) {
+    if (err instanceof (ValidationError || MissingFiledsError)) {
       errorHandler(err, res);
     } else {
       internalServerError(err, res);

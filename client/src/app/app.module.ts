@@ -30,6 +30,7 @@ import { FooterCopyComponent } from './footer/footer-copy/footer-copy.component'
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import { ContactComponent } from './contact/contact.component';
 import { CartComponent } from './cart/cart.component';
+import { ProductPageModule } from './product-page/product-page.module';
 
 export function jwtOptionsFactory() {
   return {};
@@ -70,6 +71,7 @@ export function jwtOptionsFactory() {
     ShopModule,
     FormsModule,
     UserModule,
+    ProductPageModule,
   ],
   providers: [JwtHelperService],
   bootstrap: [AppComponent],

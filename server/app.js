@@ -7,6 +7,7 @@ const userRoute = require("./routes/userRoute");
 const wishlistRoute = require("./routes/wishlistRoute");
 const shopRoute = require("./routes/shopRoute");
 const cartRoute = require("./routes/cartRoute");
+const productRoute = require("./routes/productRoute");
 
 const app = express();
 
@@ -29,5 +30,6 @@ app.use("/user", userRoute);
 app.use("/wishlist", wishlistRoute);
 app.use("/shop", shopRoute);
 app.use("/cart", cartRoute);
+app.use("/product", productRoute);
 
 module.exports = app;

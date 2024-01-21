@@ -1,0 +1,26 @@
+<div class="img-holder">
+  <img
+    src="../../../assets/img/{{ product.src }}"
+    alt="{{ product.product_name }}"
+  />
+</div>
+<div class="specifications">
+  <h2>Specifications</h2>
+  <div class="spec-row" *ngFor="let spec of specifications">
+    <p class="spec-title">{{ spec.spec_name }}</p>
+    <p>
+      {{ spec.product_spec_value }}
+      {{
+        spec.spec_measurement_unit === "N/A" ? "" : spec.spec_measurement_unit
+      }}
+    </p>
+  </div>
+
+  <p class="all-prices-info">
+    *All prices on this website are expressed in euros. VAT is included in the
+    price. PcShop is using all its resources to the maximum to ensure that all
+    items on this site are shown to you with the correct specification names,
+    photos and prices. However, we cannot guarantee that all information and
+    photos of items on this site are completely correct
+  </p>
+</div>

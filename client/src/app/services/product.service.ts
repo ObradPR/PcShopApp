@@ -32,4 +32,14 @@ export class ProductService {
   getProductsBySearch(title: string): Observable<SearchProduct[]> {
     return this.dataService.get(`products-by-search/${title}`);
   }
+
+  getSingleProduct(productName: string, userId: number): Observable<any> {
+    return this.dataService.get(
+      `product/single-product/${productName}/${userId}`
+    );
+  }
+
+  getProductSpecifications(productId: number): Observable<any> {
+    return this.dataService.get(`product/specifications/${productId}`);
+  }
 }

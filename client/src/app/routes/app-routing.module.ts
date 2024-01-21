@@ -27,6 +27,8 @@ import { ShopComponent } from '../shop/shop.component';
 import { CategoryProductsComponent } from '../shop/category-products/category-products.component';
 import { CartComponent } from '../cart/cart.component';
 import { UserComponent } from '../user/user.component';
+import { ProductPageComponent } from '../product-page/product-page.component';
+import { ProductPageResolver } from '../resolvers/product-page.resolver';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -68,6 +70,11 @@ const appRoutes: Routes = [
     resolve: { cartInfo: CartItemsResolver },
   },
   { path: 'user', component: UserComponent },
+  {
+    path: 'product/:name',
+    component: ProductPageComponent,
+    resolve: { singleProduct: ProductPageResolver },
+  },
 ];
 
 @NgModule({

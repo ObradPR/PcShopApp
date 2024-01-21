@@ -1,0 +1,43 @@
+<div class="product-name">
+  <!-- <div
+    class="add-to-wishlist"
+    (click)="addProductToWishlist(product.id_product, product.in_wishlist)"
+  > -->
+  <div class="add-to-wishlist">
+    <ng-container *ngIf="product.in_wishlist; else notIn">
+      <i class="fa-solid fa-heart"></i>
+    </ng-container>
+    <ng-template #notIn>
+      <i class="fa-regular fa-heart"></i>
+    </ng-template>
+  </div>
+  <h1>
+    {{ product.product_name }}
+  </h1>
+</div>
+<div class="product-price-info">
+  <div class="product--block-price">
+    <ng-container *ngIf="product.discount_price !== null; else elsePrice">
+      <p class="old-price">€{{ product.product_price }}</p>
+      <p class="current-price">€{{ product.discount_price }}</p>
+      <p class="saved-price">Saved: €{{ product.saved }}</p>
+    </ng-container>
+    <ng-template #elsePrice>
+      <p class="current-price">€{{ product.product_price }}</p>
+    </ng-template>
+  </div>
+
+  <div class="product--price-per-12month">
+    <p>
+      <span class="price-bold">{{
+        (product.discount_price !== null
+          ? product.discount_price / 12
+          : product.product_price / 12
+        ) | currency : "EUR" : true : "1.2-2"
+      }}</span>
+      per month In installments without interest
+    </p>
+  </div>
+
+  <p class="pay-or">or</p>
+</div>
