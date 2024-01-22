@@ -44,3 +44,14 @@
 
   <p class="pay-or">or</p>
 </div>
+<div class="add-to-cart-button" (click)="onAddToCart(product.id_product)">Add to Cart</div>
+<div class="free-shipping">
+  <i class="fa-solid fa-truck"></i>
+  <p>Free delivery on the territory of Serbia</p>
+</div>
+<div class="warranty" *ngIf="warranty">
+  <p class="warranty-title">Warranty:</p>
+  <p>Years: {{ warranty.warranty_duration }}</p>
+  <p>Terms:</p>
+  <p>{{ warranty.warranty_terms }}</p>
+</div>

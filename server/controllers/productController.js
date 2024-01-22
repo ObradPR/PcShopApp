@@ -98,11 +98,32 @@ async function getSingleProduct(req, res) {
 
 async function getInfo(req, res) {
   try {
-    const { productId } = req.params;
+    const { productId, lookFor } = req.params;
 
     if (!productId) throw new MissingFiledsError("Product doesn't exists", 404);
 
     const pool = await createPool();
+
+    if (lookFor === "warranty") {
+      const result = await pool
+        .request()
+        .input("productId", sql.Int(), productId).query(`
+          SELECT
+            warranty_duration,
+            warranty_terms
+          FROM warranties
+          WHERE id_product = @productId;
+        `);
+
+      const warranty = result.recordset[0];
+
+      res.status(200).json({
+        message: "Successfully got warranty",
+        warranty,
+      });
+
+      return;
+    }
 
     const specs = await pool.request().input("productId", sql.Int(), productId)
       .query(`
@@ -133,7 +154,7 @@ async function getInfo(req, res) {
     const reviewsRatings = revRat.recordset;
 
     res.status(200).json({
-      message: "Successfully got specification",
+      message: "Successfully got product information",
       specifications,
       reviewsRatings,
     });

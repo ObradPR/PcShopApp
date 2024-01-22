@@ -1,5 +1,6 @@
 .product-name {
   margin-top: 2rem;
+  padding: 0 0 1rem;
   border-bottom: 1px solid var(--grey-2);
 }
 
@@ -61,4 +62,52 @@
 .price-bold {
   font-weight: bold;
   font-size: 1.3em;
+}
+
+.free-shipping {
+  padding: 1.6rem 1.2rem;
+  background-color: var(--light-green);
+  border: 1px solid var(--green);
+  border-radius: var(--button-radius);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.free-shipping i.fa-truck {
+  color: var(--green);
+  margin-right: 1rem;
+}
+
+.warranty {
+  border-radius: var(--button-radius);
+  padding: 1.6rem 1.2rem;
+  background-color: var(--grey);
+  border: 1px solid var(--grey-2);
+}
+
+.warranty .warranty-title {
+  font-size: 1.2em;
+}
+
+.warranty p {
+  margin-bottom: 0.5rem;
+}
+
+.add-to-cart-button {
+  background-color: var(--golden);
+  padding: 1rem 0.6rem;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  margin-top: 2rem;
+  border: 1px solid var(--dark-golden);
+}
+
+.add-to-cart-button:hover {
+  background-color: var(--light-golden);
 }
