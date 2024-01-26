@@ -1,1 +1,24 @@
-<p>related-items works!</p>
+<div class="compatabile-items" *ngIf="compatabileItems.length > 0">
+  <h3>Compatible items</h3>
+  <div class="compatible-row">
+    <div class="compatible-block" *ngFor="let item of compatabileItems">
+      <div class="compatible-img-holder">
+        <img
+          src="../../../assets/img/{{ item.src }}"
+          [alt]="item.product_name"
+        />
+      </div>
+      <div class="compatible-item-info">
+        <div class="compatible-item-name">
+          <h4>{{ item.product_name }}</h4>
+        </div>
+        <div class="compatible-item-desc">
+          <p>{{ item.compatible_details }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="category-items" *ngIf="categoryItems.length > 0">
+  <h3>Category items</h3>
+</div>

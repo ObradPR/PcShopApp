@@ -1,0 +1,43 @@
+h3 {
+  margin-bottom: 2rem;
+}
+
+.compatible-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+  row-gap: 2rem;
+}
+
+.compatible-block {
+  border-radius: var(--button-radius);
+  border: 1px solid var(--grey-2);
+  background-color: var(--grey);
+  text-align: center;
+  padding: 1.6rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.compatible-img-holder {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compatible-img-holder img {
+  width: 80%;
+}
+
+.compatible-item-info {
+  width: 70%;
+}
+
+.compatible-item-name {
+  margin: 0 0 1rem;
+}
+
+.compatible-item-desc p {
+  font-size: 0.85em;
+}

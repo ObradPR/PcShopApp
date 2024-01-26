@@ -153,10 +153,42 @@ async function getInfo(req, res) {
 
     const reviewsRatings = revRat.recordset;
 
+    // const compatabileItemsResult = await pool
+    //   .request()
+    //   .input("productId", sql.Int(), productId).query(`
+    //   SELECT
+    //     p.product_name,
+    //     pi.src,
+    //     p.avg_rating
+    //   FROM products p
+    //   INNER JOIN product_images pi ON p.id_product = pi.id_product
+    //   INNER JOIN compatibilities c ON p.id_product = c.id_product OR p.id_product = c.id_compatible_product
+    //   WHERE p.id_product = @productId;
+    // `);
+    const compatabileItemsResult = await pool
+      .request()
+      .input("productId", sql.Int(), productId).query(`
+      SELECT TOP 4
+        c.compatible_details,
+        cp.id_product,
+        cp.product_name,
+        cpi.src,
+        cp.avg_rating 
+      FROM compatibilities c
+      INNER JOIN products p ON c.id_product = p.id_product
+      INNER JOIN product_images pi ON p.id_product = pi.id_product
+      INNER JOIN products cp ON c.id_compatible_product = cp.id_product
+      INNER JOIN product_images cpi ON cp.id_product = cpi.id_product
+      WHERE p.id_product = @productId;
+    `);
+
+    const compatabileItems = compatabileItemsResult.recordset;
+
     res.status(200).json({
       message: "Successfully got product information",
       specifications,
       reviewsRatings,
+      compatabileItems,
     });
   } catch (err) {
     if (err instanceof MissingFiledsError) {
