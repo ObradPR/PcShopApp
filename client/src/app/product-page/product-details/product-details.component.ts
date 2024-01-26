@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AppError } from 'src/app/interfaces/app-error.interface';
 import { Product } from 'src/app/interfaces/product.interface';
@@ -14,10 +15,17 @@ export class ProductDetailsComponent implements OnInit {
   specifications: any;
   reviewsRatings: any;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
     this.getInfo();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        setTimeout(() => {
+          this.getInfo();
+        }, 200);
+      }
+    });
   }
 
   getInfo() {

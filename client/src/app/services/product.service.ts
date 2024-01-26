@@ -39,7 +39,13 @@ export class ProductService {
     );
   }
 
-  getProductInfo(productId: number, lookFor?: string): Observable<any> {
-    return this.dataService.get(`product/info/${productId}/${lookFor}`);
+  getProductInfo(
+    productId: number,
+    lookFor?: string,
+    categoryName?: string
+  ): Observable<any> {
+    return this.dataService.get(
+      `product/info/${productId}/${lookFor}/${categoryName}`
+    );
   }
 }

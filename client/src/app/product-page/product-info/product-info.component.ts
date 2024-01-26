@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, finalize, take } from 'rxjs';
 import { AppError } from 'src/app/interfaces/app-error.interface';
 import { Product } from 'src/app/interfaces/product.interface';
@@ -30,12 +31,20 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private msgModalService: MessageModalService,
     private localStorageService: LocalStorageService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getUserStatus();
     this.getProductWarranty();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        setTimeout(() => {
+          this.getProductWarranty();
+        }, 200);
+      }
+    });
   }
 
   getUserStatus(): void {
@@ -55,6 +64,7 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.productService
         .getProductInfo(this.product.id_product, 'warranty')
+        .pipe(take(1))
         .subscribe((data: any) => {
           this.warranty = data.warranty;
         })
@@ -133,7 +143,7 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAddToCart(productId: number){
+  onAddToCart(productId: number) {
     if (this.userId === 0) {
       const cartId = this.localStorageService.getCartId();
 

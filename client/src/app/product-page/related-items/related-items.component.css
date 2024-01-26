@@ -41,3 +41,40 @@ h3 {
 .compatible-item-desc p {
   font-size: 0.85em;
 }
+
+.category-items-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 1.5rem;
+}
+
+.category-item-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.8rem 0.5rem;
+  background-color: var(--grey);
+  align-items: center;
+  border: 1px solid var(--grey-2);
+  border-radius: var(--button-radius);
+}
+
+.category-item-img-holder {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.category-item-img-holder img {
+  width: 85%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.category-item-block p {
+  margin-top: 1rem;
+  text-align: center;
+}

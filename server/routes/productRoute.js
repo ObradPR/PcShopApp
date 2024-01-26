@@ -6,6 +6,6 @@ const router = express.Router();
 router
   .route("/single-product/:productName/:userId")
   .get(productController.getSingleProduct);
-router.route("/info/:productId/:lookFor").get(productController.getInfo);
+router.route("/info/:productId/:lookFor/:categoryName").get(productController.getInfo);
 
 module.exports = router;

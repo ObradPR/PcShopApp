@@ -36,6 +36,7 @@ async function getSingleProduct(req, res) {
         dp.discount_value,
         dp.saved,
         p.avg_rating,
+        cat.category_name,
         ${
           +userId
             ? `CONVERT(BIT, CASE WHEN wp.id_product IS NOT NULL THEN 1 ELSE 0 END) AS in_wishlist`
@@ -43,6 +44,8 @@ async function getSingleProduct(req, res) {
         }
       FROM products p
       INNER JOIN product_images pi ON p.id_product = pi.id_product
+      INNER JOIN cat_brands cb ON cb.id_cat_brand = p.id_cat_brand
+      INNER JOIN categories cat ON cat.id_category = cb.id_category
       LEFT JOIN (
         SELECT id_product, product_price
         FROM prices
@@ -82,6 +85,7 @@ async function getSingleProduct(req, res) {
         dp.discount_value,
         dp.saved,
         p.avg_rating,
+        cat.category_name,
         ${userId ? `wp.id_product` : ""}
     `);
 
@@ -98,7 +102,7 @@ async function getSingleProduct(req, res) {
 
 async function getInfo(req, res) {
   try {
-    const { productId, lookFor } = req.params;
+    const { productId, lookFor, categoryName } = req.params;
 
     if (!productId) throw new MissingFiledsError("Product doesn't exists", 404);
 
@@ -120,6 +124,78 @@ async function getInfo(req, res) {
       res.status(200).json({
         message: "Successfully got warranty",
         warranty,
+      });
+
+      return;
+    }
+
+    if (lookFor === "compatability") {
+      //     SELECT TOP 5
+      //     p.product_name AS original_product_name,
+      //     pi.src AS original_product_src,
+      //     p.avg_rating AS original_product_avg_rating,
+      //     c.id_compatibility,
+      //     c.compatible_details,
+      //     cp.id_product AS compatible_product_id,
+      //     cp.product_name AS compatible_product_name,
+      //     cpi.src AS compatible_product_src,
+      //     cp.avg_rating AS compatible_product_avg_rating
+      // FROM compatibilities c
+      // INNER JOIN products p ON c.id_product = p.id_product
+      // INNER JOIN product_images pi ON p.id_product = pi.id_product
+      // INNER JOIN products cp ON c.id_compatible_product = cp.id_product
+      // INNER JOIN product_images cpi ON cp.id_product = cpi.id_product
+      // WHERE p.id_product = @productId
+      // ORDER BY c.id_compatibility DESC;
+      const compatabileItemsResult = await pool
+        .request()
+        .input("productId", sql.Int(), productId).query(`
+      SELECT TOP 4
+        c.compatible_details,
+        cp.id_product,
+        cp.product_name,
+        cpi.src,
+        cp.avg_rating 
+      FROM compatibilities c
+      INNER JOIN products p ON c.id_product = p.id_product
+      INNER JOIN product_images pi ON p.id_product = pi.id_product
+      INNER JOIN products cp ON c.id_compatible_product = cp.id_product
+      INNER JOIN product_images cpi ON cp.id_product = cpi.id_product
+      WHERE p.id_product = @productId
+      ORDER BY c.id_compatibility DESC;
+    `);
+
+      const compatabileItems = compatabileItemsResult.recordset;
+
+      if (categoryName) {
+        const result = await pool
+          .request()
+          .input("categoryName", sql.NVarChar(), categoryName)
+          .input("productId", sql.Int(), productId).query(`
+          SELECT TOP 5
+            p.product_name,
+            pi.src
+          FROM products p
+          INNER JOIN product_images pi ON pi.id_product = p.id_product
+          INNER JOIN cat_brands cb ON cb.id_cat_brand = p.id_cat_brand
+          INNER JOIN categories c ON c.id_category = cb.id_category
+          WHERE p.id_product != @productId AND c.category_name = @categoryName;
+        `);
+
+        const categoryProducts = result.recordset;
+
+        res.status(200).json({
+          message: "Successfully got category products and compatabilities",
+          compatabileItems,
+          categoryProducts,
+        });
+
+        return;
+      }
+
+      res.status(200).json({
+        message: "Successfully got compatabilities",
+        compatabileItems,
       });
 
       return;
@@ -153,42 +229,10 @@ async function getInfo(req, res) {
 
     const reviewsRatings = revRat.recordset;
 
-    // const compatabileItemsResult = await pool
-    //   .request()
-    //   .input("productId", sql.Int(), productId).query(`
-    //   SELECT
-    //     p.product_name,
-    //     pi.src,
-    //     p.avg_rating
-    //   FROM products p
-    //   INNER JOIN product_images pi ON p.id_product = pi.id_product
-    //   INNER JOIN compatibilities c ON p.id_product = c.id_product OR p.id_product = c.id_compatible_product
-    //   WHERE p.id_product = @productId;
-    // `);
-    const compatabileItemsResult = await pool
-      .request()
-      .input("productId", sql.Int(), productId).query(`
-      SELECT TOP 4
-        c.compatible_details,
-        cp.id_product,
-        cp.product_name,
-        cpi.src,
-        cp.avg_rating 
-      FROM compatibilities c
-      INNER JOIN products p ON c.id_product = p.id_product
-      INNER JOIN product_images pi ON p.id_product = pi.id_product
-      INNER JOIN products cp ON c.id_compatible_product = cp.id_product
-      INNER JOIN product_images cpi ON cp.id_product = cpi.id_product
-      WHERE p.id_product = @productId;
-    `);
-
-    const compatabileItems = compatabileItemsResult.recordset;
-
     res.status(200).json({
       message: "Successfully got product information",
       specifications,
       reviewsRatings,
-      compatabileItems,
     });
   } catch (err) {
     if (err instanceof MissingFiledsError) {

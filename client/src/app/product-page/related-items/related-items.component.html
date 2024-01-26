@@ -21,4 +21,18 @@
 </div>
 <div class="category-items" *ngIf="categoryItems.length > 0">
   <h3>Category items</h3>
+  <div class="category-items-row">
+    <div class="category-item-block" *ngFor="let item of categoryItems">
+      <div
+        class="category-item-img-holder"
+        routerLink="/product/{{ item.product_name }}"
+      >
+        <img
+          src="../../../assets/img/{{ item.src }}"
+          [alt]="item.product_name"
+        />
+      </div>
+      <p>{{ item.product_name }}</p>
+    </div>
+  </div>
 </div>
