@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, finalize } from 'rxjs';
 
 // INTERFACES
@@ -23,12 +23,15 @@ export class FaqsComponent implements OnInit, OnDestroy {
   constructor(
     private loadingService: LoadingService,
     private infoService: InfoService,
-    private errorHandlingService: ErrorHandlingService
+    private errorHandlingService: ErrorHandlingService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     this.loadingService.setPageLoadingInit();
     this.getFaqs();
+
+    // this.animateContent();
   }
 
   getFaqs(): void {
@@ -43,6 +46,8 @@ export class FaqsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: Faq[]) => {
           this.faqs = data;
+
+          this.animateContent();
         },
         error: (err: AppError) => {
           this.faqErrorMessage = this.errorHandlingService.errorMessage(
@@ -52,6 +57,25 @@ export class FaqsComponent implements OnInit, OnDestroy {
           console.log(err);
         },
       });
+  }
+
+  animateContent() {
+    setTimeout(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show-el');
+
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+
+      const hiddenEls =
+        this.elementRef.nativeElement.querySelectorAll('.hidden-el');
+
+      hiddenEls.forEach((el: HTMLElement) => observer.observe(el));
+    }, 0);
   }
 
   ngOnDestroy(): void {

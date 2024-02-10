@@ -1,11 +1,11 @@
 <div id="faqs-section" class="wrapper padding-section">
-  <h2>Frequently asked questions (FAQs)</h2>
+  <h2 class="hidden-el hide-bottom">Frequently asked questions (FAQs)</h2>
   <div id="faq-content">
     <ng-container *ngIf="faqs.length > 0; else noFaqs">
       <ng-container *ngFor="let faq of faqs">
-        <h3>{{ faq.faq_question }}</h3>
+        <h3 class="hidden-el hide-bottom">{{ faq.faq_question }}</h3>
         <br />
-        <p>{{ faq.faq_answer }}</p>
+        <p class="hidden-el hide-bottom">{{ faq.faq_answer }}</p>
         <br /><br />
       </ng-container>
     </ng-container>

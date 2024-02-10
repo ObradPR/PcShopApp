@@ -13,21 +13,46 @@ export class CoverComponent implements OnInit {
   }
 
   revealElements(): void {
+    this.hideElements();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          switch (entry.target.localName) {
+            case 'div':
+              entry.target.classList.remove('element-hidden-left');
+              break;
+            case 'a':
+              entry.target.classList.remove('element-hidden-right');
+              break;
+            case 'h1':
+              entry.target.classList.remove('element-hidden-right');
+              break;
+            case 'h2':
+              entry.target.classList.remove('element-hidden-right');
+              break;
+          }
+
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    const hiddenEls =
+      this.elementRef.nativeElement.querySelectorAll('.hidden-el');
+
+    hiddenEls.forEach((el: HTMLElement) => observer.observe(el));
+  }
+
+  hideElements() {
     const img = this.elementRef.nativeElement.querySelector('#cover-img');
     const btn = this.elementRef.nativeElement.querySelector('#cover-btn');
     const h1 = this.elementRef.nativeElement.querySelector('#cover-hero');
     const h2 = this.elementRef.nativeElement.querySelector('#cover-tag-line');
 
     img.classList.add('element-hidden-left');
-    btn.classList.add('element-hidden-bottom');
-    h1.classList.add('element-hidden-top');
+    btn.classList.add('element-hidden-right');
+    h1.classList.add('element-hidden-right');
     h2.classList.add('element-hidden-right');
-
-    setTimeout(() => {
-      img.classList.remove('element-hidden-left');
-      btn.classList.remove('element-hidden-bottom');
-      h1.classList.remove('element-hidden-top');
-      h2.classList.remove('element-hidden-right');
-    }, 500);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Subscription, finalize } from 'rxjs';
 
 // INTERFACES
@@ -23,12 +23,15 @@ export class RepairServiceComponent implements OnInit {
   constructor(
     private loadingService: LoadingService,
     private infoService: InfoService,
-    private errorHandlingService: ErrorHandlingService
+    private errorHandlingService: ErrorHandlingService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     this.loadingService.setPageLoadingInit();
     this.getRepairServices();
+
+    this.animateContent();
   }
 
   getRepairServices(): void {
@@ -51,5 +54,21 @@ export class RepairServiceComponent implements OnInit {
           );
         },
       });
+  }
+
+  animateContent() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show-el');
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    const hiddenEls =
+      this.elementRef.nativeElement.querySelectorAll('.hidden-el');
+
+    hiddenEls.forEach((el: HTMLElement) => observer.observe(el));
   }
 }
