@@ -53,11 +53,11 @@ You can find the certificate files at the following location:
 
     client
   
-    ├── ssl
-    │   ├── server.crt
-    │   └── server.key
-    ├── src
-    ├── ...
+      ├── ssl
+      │   ├── server.crt
+      │   └── server.key
+      ├── src
+      ├── ...
 
 - Double-click on the `server.cert` file to open the certificate.
 - Click on "Install Certificate" to start the certificate import wizard.
