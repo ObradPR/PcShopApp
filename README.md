@@ -28,7 +28,8 @@ PcShopApp is a full-stack web application designed for a PC shop franchise with 
 
 Before trying to run the application make sure that you have installed prerequisites for the project and that you have set up everything nicely, so that application can work without problems.
 
-1. **Angular Client App SSL Configuration** 
+1. **Angular Client App SSL Configuration**
+
 This app is using client certificate for running Angular app on HTTPS protocol.
 If you don't want that, you can just turn off the SSL option:
 
@@ -69,6 +70,7 @@ You can find the certificate files at the following location:
 By following these steps, you can install the client certificate on your PC, allowing you to access your Angular application over HTTPS without encountering security warnings.
 
 2. **SQL Server drivers**
+
 For now you can skip this, but when you start your application (client, server, with executed script for creating database and all the Objects and Data) if you are encountering some weird error regarding ODBC driver/s. Please check what drivers you have and ensure that you have some from the following list, keep in mind that if you don't have some drivers from the list and the app is working perfectly then don't bother:
 
 To see the drivers:
