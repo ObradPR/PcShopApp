@@ -48,7 +48,7 @@ If you don't want that, you can just turn off the SSL option:
 ```
 If you are fan of running local app in environment as close as production, you just need to install client certificate for the application to work properly.
 
-- Locate the server.cert file in your project folder.
+- Locate the server.crt file in your project folder.
 You can find the certificate files at the following location:
 
     client
@@ -59,7 +59,7 @@ You can find the certificate files at the following location:
       ├── src
       ├── ...
 
-- Double-click on the `server.cert` file to open the certificate.
+- Double-click on the `server.crt` file to open the certificate.
 - Click on "Install Certificate" to start the certificate import wizard.
 - In the wizard, select "Local Machine" or "Current User" depending on your preference, andc click "Next".
 - Choose "Place all certificates in the following store" and click "Browse".
