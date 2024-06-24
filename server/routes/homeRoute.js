@@ -18,5 +18,6 @@ router.route("/stores").get(homeController.getStoresInfo);
 router.route("/payment-types").get(homeController.getPaymentTypes);
 router.route("/popular-categories").get(homeController.getPopularCategories);
 router.route("/products-by-search/:title").get(homeController.getProductsBySearch)
+router.route("/cities").get(homeController.getCities);
 
 module.exports = router;

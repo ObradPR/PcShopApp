@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DataService } from './data.service';
 
 // INTERFACES
-import { WishlistItem } from '../interfaces/wishlist-item.interface';
+import { WishlistItem } from '../common/interfaces/wishlist-item.interface';
 
 @Injectable({
   providedIn: 'root',

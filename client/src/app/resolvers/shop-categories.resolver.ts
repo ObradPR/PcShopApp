@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ShopService } from '../services/shop.service';
 
 // INTERFACES
-import { Category } from '../interfaces/category.interface';
+import { Category } from '../common/interfaces/category.interface';
 
 @Injectable({
   providedIn: 'root',

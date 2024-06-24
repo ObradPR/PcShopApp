@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { DataService } from './data.service';
 
 // INTERFACES
-import { Testimonial } from '../interfaces/testimonial.interface';
-import { Contact } from '../interfaces/contact.interface';
-import { Faq } from '../interfaces/faq.interface';
-import { RepairService } from '../interfaces/repair-service.interface';
-import { Store } from '../interfaces/store.interface';
-import { PaymentType } from '../interfaces/payment-type.interface';
-import { Category } from '../interfaces/category.interface';
+import { Testimonial } from '../common/interfaces/testimonial.interface';
+import { Contact } from '../common/interfaces/contact.interface';
+import { Faq } from '../common/interfaces/faq.interface';
+import { RepairService } from '../common/interfaces/repair-service.interface';
+import { Store } from '../common/interfaces/store.interface';
+import { PaymentType } from '../common/interfaces/payment-type.interface';
+import { Category } from '../common/interfaces/category.interface';
+import { City } from '../common/interfaces/city.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +48,11 @@ export class InfoService {
     return this.dataService.get('payment-types');
   }
 
-  getPopularCategories(): Observable<Category[]>{
+  getPopularCategories(): Observable<Category[]> {
     return this.dataService.get('popular-categories');
+  }
+
+  getCities(): Observable<City[]> {
+    return this.dataService.get('cities');
   }
 }

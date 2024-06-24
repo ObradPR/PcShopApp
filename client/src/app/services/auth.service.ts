@@ -7,7 +7,7 @@ import { DataService } from './data.service';
 import { LocalStorageService } from './local-storage.service';
 
 // INTERFACES
-import { UserData } from '../interfaces/user-data.interface';
+import { UserData } from '../common/interfaces/user-data.interface';
 
 @Injectable({
   providedIn: 'root',

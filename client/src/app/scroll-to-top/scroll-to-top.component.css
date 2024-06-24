@@ -1,8 +1,0 @@
-#scroll-to-top-btn {
-  position: fixed;
-  right: 2rem;
-  bottom: 2rem;
-  font-size: 3rem;
-  cursor: pointer;
-  color: var(--orange);
-}

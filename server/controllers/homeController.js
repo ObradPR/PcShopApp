@@ -318,16 +318,30 @@ async function getPaymentTypes(req, res) {
     const pool = await createPool();
 
     const result = await pool.query(`
-      SELECT
-        payment_type,
-        payment_type_description,
-        payment_type_img_src
+      SELECT *
       FROM payment_types
     `);
 
     const paymentTypes = result.recordset;
 
     res.status(200).json(paymentTypes);
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
+async function getCities(req, res) {
+  try {
+    const pool = await createPool();
+
+    const result = await pool.query(`
+      SELECT *
+      FROM cities  
+    `);
+
+    const cities = result.recordset;
+
+    res.status(200).json(cities);
   } catch (err) {
     internalServerError(err, res);
   }
@@ -434,4 +448,5 @@ module.exports = {
   getPaymentTypes,
   getPopularCategories,
   getProductsBySearch,
+  getCities,
 };

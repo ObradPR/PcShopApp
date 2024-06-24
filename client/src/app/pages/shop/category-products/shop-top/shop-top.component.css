@@ -1,0 +1,44 @@
+#shop-top-holder {
+  width: 100%;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#sort-holder {
+  width: 20%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 1478px) {
+  #sort-holder {
+    width: 25%;
+  }
+}
+@media (max-width: 1196px) {
+  #sort-holder {
+    width: 30%;
+  }
+}
+@media (max-width: 1000px) {
+  #sort-holder {
+    width: 35%;
+  }
+}
+@media (max-width: 702px) {
+  #sort-holder {
+    width: 40%;
+  }
+}
+@media (max-width: 602px) {
+  #sort-holder {
+    width: 45%;
+  }
+}
+@media (max-width: 534px) {
+  #sort-holder {
+    width: 100%;
+  }
+}

@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
 import { ProductService } from '../services/product.service';
 import { AuthService } from '../services/auth.service';
-import { UserData } from '../interfaces/user-data.interface';
+import { UserData } from '../common/interfaces/user-data.interface';
 
 @Injectable({
   providedIn: 'root',

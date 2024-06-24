@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DataService } from './data.service';
 
 // INTERFACES
-import { Category } from '../interfaces/category.interface';
-import { Product } from '../interfaces/product.interface';
+import { Category } from '../common/interfaces/category.interface';
+import { Product } from '../common/interfaces/product.interface';
 
 // TYPES
 type ShopCategoryData =

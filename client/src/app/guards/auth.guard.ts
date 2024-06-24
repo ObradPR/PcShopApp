@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 // INTERFACES
-import { UserData } from '../interfaces/user-data.interface';
+import { UserData } from '../common/interfaces/user-data.interface';
 
 @Injectable({
   providedIn: 'root',

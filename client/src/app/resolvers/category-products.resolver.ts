@@ -7,8 +7,8 @@ import { ProductService } from '../services/product.service';
 import { AuthService } from '../services/auth.service';
 
 // INTERFACES
-import { UserData } from '../interfaces/user-data.interface';
-import { Product } from '../interfaces/product.interface';
+import { UserData } from '../common/interfaces/user-data.interface';
+import { Product } from '../common/interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',

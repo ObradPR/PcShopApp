@@ -11,23 +11,23 @@ import { CategoryProductsResolver } from '../resolvers/category-products.resolve
 import { CartItemsResolver } from '../resolvers/cart-items.resolver';
 
 // COMPONENTS
-import { HomeComponent } from '../home/home.component';
-import { AboutUsComponent } from '../our-company/about-us/about-us.component';
-import { WeRentComponent } from '../our-company/we-rent/we-rent.component';
-import { CustomerRightsComponent } from '../our-company/customer-rights/customer-rights.component';
-import { HowToBuyComponent } from '../our-company/how-to-buy/how-to-buy.component';
-import { ContactComponent } from '../contact/contact.component';
-import { FaqsComponent } from '../our-company/faqs/faqs.component';
-import { RepairServiceComponent } from '../our-company/repair-service/repair-service.component';
-import { StoresComponent } from '../our-company/stores/stores.component';
-import { PaymentTypesComponent } from '../our-company/payment-types/payment-types.component';
-import { WishlistComponent } from '../wishlist/wishlist.component';
-import { ShopCategoriesComponent } from '../shop/shop-categories/shop-categories.component';
-import { ShopComponent } from '../shop/shop.component';
-import { CategoryProductsComponent } from '../shop/category-products/category-products.component';
-import { CartComponent } from '../cart/cart.component';
-import { UserComponent } from '../user/user.component';
-import { ProductPageComponent } from '../product-page/product-page.component';
+import { HomeComponent } from '../pages/home/home.component';
+import { AboutUsComponent } from '../pages/our-company/about-us/about-us.component';
+import { WeRentComponent } from '../pages/our-company/we-rent/we-rent.component';
+import { CustomerRightsComponent } from '../pages/our-company/customer-rights/customer-rights.component';
+import { HowToBuyComponent } from '../pages/our-company/how-to-buy/how-to-buy.component';
+import { ContactComponent } from '../pages/contact/contact.component';
+import { FaqsComponent } from '../pages/our-company/faqs/faqs.component';
+import { RepairServiceComponent } from '../pages/our-company/repair-service/repair-service.component';
+import { StoresComponent } from '../pages/our-company/stores/stores.component';
+import { PaymentTypesComponent } from '../pages/our-company/payment-types/payment-types.component';
+import { WishlistComponent } from '../pages/wishlist/wishlist.component';
+import { ShopCategoriesComponent } from '../pages/shop/shop-categories/shop-categories.component';
+import { ShopComponent } from '../pages/shop/shop.component';
+import { CategoryProductsComponent } from '../pages/shop/category-products/category-products.component';
+import { CartComponent } from '../pages/cart/cart.component';
+import { UserComponent } from '../pages/user/user.component';
+import { ProductPageComponent } from '../pages/product-page/product-page.component';
 import { ProductPageResolver } from '../resolvers/product-page.resolver';
 
 const appRoutes: Routes = [

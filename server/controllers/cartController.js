@@ -7,6 +7,35 @@ const { ValidationError, MissingFiledsError } = require("../error");
 const currDate = getCurrentDate();
 
 // ASYNC FUNCTIONS
+async function placeOrder(req, res) {
+  try {
+    const { fullName, address, city, paymentType, cart } = req.body;
+
+    const pool = await createPool();
+
+    await pool
+      .request()
+      .input("fullName", sql.NVarChar(), fullName)
+      .input("address", sql.NVarChar(), address)
+      .input("city", sql.SmallInt(), city)
+      .input("paymentType", sql.TinyInt(), paymentType)
+      .input("cart", sql.Int(), cart).query(`
+          INSERT INTO orders(id_cart, id_payment_type, order_date, order_address, id_city, id_order_status, recipient_name)
+          VALUES (@cart, @paymentType, '${currDate}', @address, @city, 1, @fullName)
+        `);
+
+    await pool.request().input("cart", sql.Int(), cart).query(`
+        UPDATE carts
+        SET id_cart_status = 2
+        WHERE id_cart = @cart;
+      `);
+
+    res.status(201).json({ message: "Success!" });
+  } catch (err) {
+    internalServerError(err, res);
+  }
+}
+
 async function setProductInCart(req, res) {
   try {
     const { productId, userId, cartId } = req.body;
@@ -212,7 +241,8 @@ async function getCartItems(req, res) {
           pr.product_price,
           dp.discount_price,
           dp.discount_value,
-          dp.saved
+          dp.saved,
+          c.id_cart
         FROM cart_items ci
         INNER JOIN carts c ON ci.id_cart = c.id_cart
         INNER JOIN cart_status cs ON cs.id_cart_status = c.id_cart_status
@@ -269,7 +299,8 @@ async function getCartItems(req, res) {
           pr.product_price,
           dp.discount_price,
           dp.discount_value,
-          dp.saved
+          dp.saved,
+          c.id_cart
         FROM cart_items ci
         INNER JOIN carts c ON ci.id_cart = c.id_cart
         INNER JOIN cart_status cs ON cs.id_cart_status = c.id_cart_status
@@ -397,4 +428,5 @@ module.exports = {
   getCartItems,
   deleteCartItem,
   updateItemAmount,
+  placeOrder,
 };

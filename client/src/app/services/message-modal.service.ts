@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 
 // INTERFACES
-import { MessageModal } from '../interfaces/message-modal.interface';
+import { MessageModal } from '../common/interfaces/message-modal.interface';
 
 @Injectable({
   providedIn: 'root',

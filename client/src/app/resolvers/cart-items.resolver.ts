@@ -8,9 +8,9 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { CartService } from '../services/cart.service';
 
 // INTERFACES
-import { UserData } from '../interfaces/user-data.interface';
-import { CartItem } from '../interfaces/cart-item.interface';
-import { CartStats } from '../interfaces/cart-stats.interface';
+import { UserData } from '../common/interfaces/user-data.interface';
+import { CartItem } from '../common/interfaces/cart-item.interface';
+import { CartStats } from '../common/interfaces/cart-stats.interface';
 
 @Injectable({
   providedIn: 'root',

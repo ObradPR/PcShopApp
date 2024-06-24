@@ -7,7 +7,7 @@ import { LoadingService } from './services/loading.service';
 import { MessageModalService } from './services/message-modal.service';
 
 // INTERFACES
-import { UserData } from './interfaces/user-data.interface';
+import { UserData } from './common/interfaces/user-data.interface';
 
 @Component({
   selector: 'app-root',

@@ -11,26 +11,26 @@ import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 // USER MODULES
 import { AppRoutingModule } from './routes/app-routing.module';
 import { SharedModule } from './shared/shared.module';
-import { HomeModule } from './home/home.module';
-import { AuthModule } from './auth/auth.module';
-import { OurCompanyModule } from './our-company/our-company.module';
-import { WishlistModule } from './wishlist/wishlist.module';
-import { ShopModule } from './shop/shop.module';
-import { UserModule } from './user/user.module';
+import { HomeModule } from './pages/home/home.module';
+import { AuthModule } from './components/auth/auth.module';
+import { OurCompanyModule } from './pages/our-company/our-company.module';
+import { WishlistModule } from './pages/wishlist/wishlist.module';
+import { ShopModule } from './pages/shop/shop.module';
+import { UserModule } from './pages/user/user.module';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { HeaderTopComponent } from './header/header-top/header-top.component';
-import { HeaderBottomComponent } from './header/header-bottom/header-bottom.component';
-import { FooterComponent } from './footer/footer.component';
-import { FooterTopComponent } from './footer/footer-top/footer-top.component';
-import { FooterBottomComponent } from './footer/footer-bottom/footer-bottom.component';
-import { FooterCopyComponent } from './footer/footer-copy/footer-copy.component';
-import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
-import { ContactComponent } from './contact/contact.component';
-import { CartComponent } from './cart/cart.component';
-import { ProductPageModule } from './product-page/product-page.module';
+import { HeaderComponent } from './components/header/header.component';
+import { HeaderTopComponent } from './components/header/header-top/header-top.component';
+import { HeaderBottomComponent } from './components/header/header-bottom/header-bottom.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { FooterTopComponent } from './components/footer/footer-top/footer-top.component';
+import { FooterBottomComponent } from './components/footer/footer-bottom/footer-bottom.component';
+import { FooterCopyComponent } from './components/footer/footer-copy/footer-copy.component';
+import { ScrollToTopComponent } from './components/scroll-to-top/scroll-to-top.component';
+import { ContactComponent } from './pages/contact/contact.component';
+import { CartComponent } from './pages/cart/cart.component';
+import { ProductPageModule } from './pages/product-page/product-page.module';
 
 export function jwtOptionsFactory() {
   return {};

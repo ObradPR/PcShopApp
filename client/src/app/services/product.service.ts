@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { DataService } from './data.service';
 
 // INTERFACES
-import { FeaturedProduct } from '../interfaces/featured-product.interface';
-import { SearchProduct } from '../interfaces/search-product.interface';
-import { Product } from '../interfaces/product.interface';
+import { FeaturedProduct } from '../common/interfaces/featured-product.interface';
+import { SearchProduct } from '../common/interfaces/search-product.interface';
+import { Product } from '../common/interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { WishlistService } from '../services/wishlist.service';
 
 // INTERFACES
-import { WishlistItem } from '../interfaces/wishlist-item.interface';
+import { WishlistItem } from '../common/interfaces/wishlist-item.interface';
 
 @Injectable({
   providedIn: 'root',

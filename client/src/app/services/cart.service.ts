@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DataService } from './data.service';
 
 // INTERFACES
-import { CartItem } from '../interfaces/cart-item.interface';
-import { CartStats } from '../interfaces/cart-stats.interface';
+import { CartItem } from '../common/interfaces/cart-item.interface';
+import { CartStats } from '../common/interfaces/cart-stats.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -57,5 +57,15 @@ export class CartService {
       howMuch,
       itemId,
     });
+  }
+
+  placeOrder(order: {
+    fullName: string;
+    address: string;
+    city: number;
+    paymentType: number;
+    cart: number;
+  }) {
+    return this.dataService.post('cart/place-order', order);
   }
 }
