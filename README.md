@@ -40,8 +40,8 @@ If you don't want that, you can just turn off the SSL option:
   "serve": {
     "options": {
       "ssl": false,
-      "sslKey": "ssl/client.key",
-      "sslCert": "ssl/client.cert"
+      "sslKey": "ssl/server.key",
+      "sslCert": "ssl/server.crt"
     }
   }
 }
@@ -54,7 +54,7 @@ You can find the certificate files at the following location:
     client
   
     ├── ssl
-    │   ├── server.cert
+    │   ├── server.crt
     │   └── server.key
     ├── src
     ├── ...
