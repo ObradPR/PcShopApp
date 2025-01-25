@@ -146,8 +146,5 @@ exports.config = {
 
 ## Demo
 
-If you want to test the application you can register with your account, or use test account:
-
-    Email:      obra@gmail.com
-    Password:   Boba1234@
+If you want to test the application you can create your account.
 
